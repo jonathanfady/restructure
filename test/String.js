@@ -5,7 +5,8 @@ describe('String', function () {
   describe('decode', function () {
     it('should decode fixed length', function () {
       const string = new StringT(7);
-      assert.equal(string.fromBuffer(Buffer.from('testing')), 'testing');
+      const stream = new DecodeStream(Buffer.from('testing'));
+      assert.equal(string.decode(stream), 'testing');
     });
 
     // it('should decode length from parent key', function() {
@@ -21,7 +22,8 @@ describe('String', function () {
 
     it('should decode utf8', function () {
       const string = new StringT(4, 'utf8');
-      assert.equal(string.fromBuffer(Buffer.from('🍻')), '🍻');
+      const stream = new DecodeStream(Buffer.from('🍻'));
+      assert.equal(string.decode(stream), '🍻');
     });
 
     // it('should decode encoding computed from function', function() {
@@ -82,7 +84,10 @@ describe('String', function () {
   describe('encode', function () {
     it('should encode using string length', function () {
       const string = new StringT(7);
-      assert.deepEqual(string.toBuffer('testing'), Buffer.from('testing'));
+      const buffer = new Uint8Array(string.size());
+      const stream = new EncodeStream(buffer);
+      string.encode(stream, 'testing');
+      assert.deepEqual(buffer, Buffer.from('testing'));
     });
 
     // it('should encode length as number before string', function () {
@@ -97,7 +102,10 @@ describe('String', function () {
 
     it('should encode utf8', function () {
       const string = new StringT(4, 'utf8');
-      assert.deepEqual(string.toBuffer('🍻'), Buffer.from('🍻'));
+      const buffer = new Uint8Array(string.size());
+      const stream = new EncodeStream(buffer);
+      string.encode(stream, '🍻');
+      assert.deepEqual(buffer, Buffer.from('🍻'));
     });
 
     // it('should encode encoding computed from function', function () {

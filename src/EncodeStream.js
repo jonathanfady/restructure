@@ -1,5 +1,3 @@
-// import { DecodeStream } from './DecodeStream.js';
-
 const textEncoder = new TextEncoder();
 const isBigEndian = new Uint8Array(new Uint16Array([0x1234]).buffer)[0] == 0x12;
 
@@ -18,6 +16,10 @@ export class EncodeStream {
   writeString(string, encoding = 'ascii') {
     let buf;
     switch (encoding) {
+      case 'ascii':
+        buf = stringToAscii(string);
+        break;
+
       case 'utf16le':
       case 'utf16-le':
       case 'ucs2': // node treats this the same as utf16.
@@ -31,10 +33,6 @@ export class EncodeStream {
 
       case 'utf8':
         buf = textEncoder.encode(string);
-        break;
-
-      case 'ascii':
-        buf = stringToAscii(string);
         break;
 
       default:
@@ -72,18 +70,8 @@ export class EncodeStream {
     }
   }
 
-  // fill(val, length) {
-  //   if (length < this.buffer.length) {
-  //     this.buffer.fill(val, this.pos, this.pos + length);
-  //     this.pos += length;
-  //   } else {
-  //     const buf = new Uint8Array(length);
-  //     buf.fill(val);
-  //     this.writeBuffer(buf);
-  //   }
-  // }
 
-  // Hardcode everything
+
   writeUInt8(value) {
     this.view.setUint8(this.pos, value);
     this.pos += 1;
@@ -166,26 +154,3 @@ function stringToAscii(string) {
   }
   return buf;
 }
-
-// for (let key of Object.getOwnPropertyNames(DataView.prototype)) {
-//   if (key.slice(0, 3) === 'set') {
-//     let type = key.slice(3).replace('Ui', 'UI');
-//     if (type === 'Float32') {
-//       type = 'Float';
-//     } else if (type === 'Float64') {
-//       type = 'Double';
-//     }
-//     let bytes = DecodeStream.TYPES[type];
-//     EncodeStream.prototype['write' + type + (bytes === 1 ? '' : 'BE')] = function (value) {
-//       this.view[key](this.pos, value, false);
-//       this.pos += bytes;
-//     };
-
-//     if (bytes !== 1) {
-//       EncodeStream.prototype['write' + type + 'LE'] = function (value) {
-//         this.view[key](this.pos, value, true);
-//         this.pos += bytes;
-//       };
-//     }
-//   }
-// }

@@ -8,8 +8,7 @@ export class Base {
   }
 
   toBuffer(value) {
-    const size = this.size(/*value*/);
-    const buffer = new Uint8Array(size);
+    const buffer = new Uint8Array(this.size());
     const stream = new EncodeStream(buffer);
     this.encode(stream, value);
     return buffer;

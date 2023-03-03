@@ -4,9 +4,9 @@ import { Array as ArrayT, uint8, uint16, DecodeStream, EncodeStream } from 'rest
 describe('Array', function () {
   describe('decode', function () {
     it('should decode fixed length', function () {
-      const buffer = new Uint8Array([1, 2, 3, 4, 5]);
       const array = new ArrayT(uint8, 4);
-      assert.deepEqual(array.fromBuffer(buffer), [1, 2, 3, 4]);
+      const stream = new DecodeStream(new Uint8Array([1, 2, 3, 4, 5]));
+      assert.deepEqual(array.decode(stream), [1, 2, 3, 4]);
     });
 
     // it('should decode fixed amount of bytes', function () {
@@ -84,7 +84,9 @@ describe('Array', function () {
   describe('encode', function () {
     it('should encode using array length', function () {
       const array = new ArrayT(uint8, 10);
-      const buffer = array.toBuffer([1, 2, 3, 4]);
+      const buffer = new Uint8Array(array.size());
+      const stream = new EncodeStream(buffer);
+      array.encode(stream, [1, 2, 3, 4]);
       assert.deepEqual(buffer, new Uint8Array([1, 2, 3, 4, 0, 0, 0, 0, 0, 0]));
     });
 

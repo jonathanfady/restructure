@@ -26,8 +26,17 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(uint8.size(), 1));
 
     it('should encode', function () {
-      assert.deepEqual(uint8.toBuffer(0xab), new Uint8Array([0xab]));
-      assert.deepEqual(uint8.toBuffer(0xff), new Uint8Array([0xff]));
+      const buffer = new Uint8Array(uint8.size());
+      const stream = new EncodeStream(buffer);
+      uint8.encode(stream, 0xab);
+      assert.deepEqual(buffer, new Uint8Array([0xab]));
+    });
+
+    it('should encode', function () {
+      const buffer = new Uint8Array(uint8.size());
+      const stream = new EncodeStream(buffer);
+      uint8.encode(stream, 0xff);
+      assert.deepEqual(buffer, new Uint8Array([0xff]));
     });
   });
 
@@ -44,7 +53,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(uint16be.size(), 2));
 
     it('should encode', function () {
-      assert.deepEqual(uint16be.toBuffer(0xabff), new Uint8Array([0xab, 0xff]));
+      const buffer = new Uint8Array(uint16be.size());
+      const stream = new EncodeStream(buffer);
+      uint16be.encode(stream, 0xabff);
+      assert.deepEqual(buffer, new Uint8Array([0xab, 0xff]));
     });
   });
 
@@ -57,7 +69,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(uint16le.size(), 2));
 
     it('should encode', function () {
-      assert.deepEqual(uint16le.toBuffer(0xabff), new Uint8Array([0xff, 0xab]));
+      const buffer = new Uint8Array(uint16le.size());
+      const stream = new EncodeStream(buffer);
+      uint16le.encode(stream, 0xabff);
+      assert.deepEqual(buffer, new Uint8Array([0xff, 0xab]));
     });
   });
 
@@ -74,7 +89,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(uint24be.size(), 3));
 
     it('should encode', function () {
-      assert.deepEqual(uint24be.toBuffer(0xffab24), new Uint8Array([0xff, 0xab, 0x24]));
+      const buffer = new Uint8Array(uint24be.size());
+      const stream = new EncodeStream(buffer);
+      uint24be.encode(stream, 0xffab24);
+      assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24]));
     });
   });
 
@@ -87,7 +105,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(uint24le.size(), 3));
 
     it('should encode', function () {
-      assert.deepEqual(uint24le.toBuffer(0xffab24), new Uint8Array([0x24, 0xab, 0xff]));
+      const buffer = new Uint8Array(uint24le.size());
+      const stream = new EncodeStream(buffer);
+      uint24le.encode(stream, 0xffab24);
+      assert.deepEqual(buffer, new Uint8Array([0x24, 0xab, 0xff]));
     });
   });
 
@@ -104,7 +125,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(uint32be.size(), 4));
 
     it('should encode', function () {
-      assert.deepEqual(uint32be.toBuffer(0xffab24bf), new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
+      const buffer = new Uint8Array(uint32be.size());
+      const stream = new EncodeStream(buffer);
+      uint32be.encode(stream, 0xffab24bf);
+      assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
     });
   });
 
@@ -117,7 +141,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(uint32le.size(), 4));
 
     it('should encode', function () {
-      assert.deepEqual(uint32le.toBuffer(0xffab24bf), new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
+      const buffer = new Uint8Array(uint32le.size());
+      const stream = new EncodeStream(buffer);
+      uint32le.encode(stream, 0xffab24bf);
+      assert.deepEqual(buffer, new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
     });
   });
 
@@ -131,8 +158,16 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(int8.size(), 1));
 
     it('should encode', function () {
-      assert.deepEqual(uint8.toBuffer(127), new Uint8Array([0x7f]));
-      assert.deepEqual(uint8.toBuffer(-1), new Uint8Array([0xff]));
+      const buffer = new Uint8Array(int8.size());
+      const stream = new EncodeStream(buffer);
+      int8.encode(stream, 127);
+      assert.deepEqual(buffer, new Uint8Array([0x7f]));
+    });
+    it('should encode', function () {
+      const buffer = new Uint8Array(int8.size());
+      const stream = new EncodeStream(buffer);
+      int8.encode(stream, -1);
+      assert.deepEqual(buffer, new Uint8Array([0xff]));
     });
   });
 
@@ -149,7 +184,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(int16be.size(), 2));
 
     it('should encode', function () {
-      assert.deepEqual(int16be.toBuffer(-85), new Uint8Array([0xff, 0xab]));
+      const buffer = new Uint8Array(int16be.size());
+      const stream = new EncodeStream(buffer);
+      int16be.encode(stream, -85);
+      assert.deepEqual(buffer, new Uint8Array([0xff, 0xab]));
     });
   });
 
@@ -162,7 +200,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(int16le.size(), 2));
 
     it('should encode', function () {
-      assert.deepEqual(int16le.toBuffer(-85), new Uint8Array([0xab, 0xff]));
+      const buffer = new Uint8Array(int16le.size());
+      const stream = new EncodeStream(buffer);
+      int16le.encode(stream, -85);
+      assert.deepEqual(buffer, new Uint8Array([0xab, 0xff]));
     });
   });
 
@@ -179,7 +220,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(int24be.size(), 3));
 
     it('should encode', function () {
-      assert.deepEqual(int24be.toBuffer(-21724), new Uint8Array([0xff, 0xab, 0x24]));
+      const buffer = new Uint8Array(int24be.size());
+      const stream = new EncodeStream(buffer);
+      int24be.encode(stream, -21724);
+      assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24]));
     });
   });
 
@@ -192,7 +236,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(int24le.size(), 3));
 
     it('should encode', function () {
-      assert.deepEqual(int24le.toBuffer(-21724), new Uint8Array([0x24, 0xab, 0xff]));
+      const buffer = new Uint8Array(int24le.size());
+      const stream = new EncodeStream(buffer);
+      int24le.encode(stream, -21724);
+      assert.deepEqual(buffer, new Uint8Array([0x24, 0xab, 0xff]));
     });
   });
 
@@ -209,7 +256,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(int32be.size(), 4));
 
     it('should encode', function () {
-      assert.deepEqual(int32be.toBuffer(-5561153), new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
+      const buffer = new Uint8Array(int32be.size());
+      const stream = new EncodeStream(buffer);
+      int32be.encode(stream, -5561153);
+      assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
     });
   });
 
@@ -222,7 +272,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(int32le.size(), 4));
 
     it('should encode', function () {
-      assert.deepEqual(int32le.toBuffer(-5561153), new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
+      const buffer = new Uint8Array(int32le.size());
+      const stream = new EncodeStream(buffer);
+      int32le.encode(stream, -5561153);
+      assert.deepEqual(buffer, new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
     });
   });
 
@@ -232,7 +285,8 @@ describe('Number', function () {
 
   describe('floatbe', function () {
     it('should decode', function () {
-      const value = floatbe.fromBuffer(new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
+      const stream = new DecodeStream(new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
+      const value = floatbe.decode(stream);
       assert(value >= 250.55 - 0.005);
       assert(value <= 250.55 + 0.005);
     });
@@ -240,13 +294,17 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(floatbe.size(), 4));
 
     it('should encode', function () {
-      assert.deepEqual(floatbe.toBuffer(250.55), new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
+      const buffer = new Uint8Array(floatbe.size());
+      const stream = new EncodeStream(buffer);
+      floatbe.encode(stream, 250.55);
+      assert.deepEqual(buffer, new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
     });
   });
 
   describe('floatle', function () {
     it('should decode', function () {
-      const value = floatle.fromBuffer(new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
+      const stream = new DecodeStream(new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
+      const value = floatle.decode(stream);
       assert(value >= 250.55 - 0.005);
       assert(value <= 250.55 + 0.005);
     });
@@ -254,7 +312,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(floatle.size(), 4));
 
     it('should encode', function () {
-      assert.deepEqual(floatle.toBuffer(250.55), new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
+      const buffer = new Uint8Array(floatle.size());
+      const stream = new EncodeStream(buffer);
+      floatle.encode(stream, 250.55);
+      assert.deepEqual(buffer, new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
     });
   });
 
@@ -264,7 +325,8 @@ describe('Number', function () {
 
   describe('doublebe', function () {
     it('should decode', function () {
-      const value = doublebe.fromBuffer(new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
+      const stream = new DecodeStream(new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
+      const value = doublebe.decode(stream);
       assert(value >= 1234.56 - 0.005);
       assert(value <= 1234.56 + 0.005);
     });
@@ -272,13 +334,17 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(doublebe.size(), 8));
 
     it('should encode', function () {
-      assert.deepEqual(doublebe.toBuffer(1234.56), new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
+      const buffer = new Uint8Array(doublebe.size());
+      const stream = new EncodeStream(buffer);
+      doublebe.encode(stream, 1234.56);
+      assert.deepEqual(buffer, new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
     });
   });
 
   describe('doublele', function () {
     it('should decode', function () {
-      const value = doublele.fromBuffer(new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
+      const stream = new DecodeStream(new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
+      const value = doublele.decode(stream);
       assert(value >= 1234.56 - 0.005);
       assert(value <= 1234.56 + 0.005);
     });
@@ -286,7 +352,10 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(doublele.size(), 8));
 
     it('should encode', function () {
-      assert.deepEqual(doublele.toBuffer(1234.56), new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
+      const buffer = new Uint8Array(doublele.size());
+      const stream = new EncodeStream(buffer);
+      doublele.encode(stream, 1234.56);
+      assert.deepEqual(buffer, new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
     });
   });
 
