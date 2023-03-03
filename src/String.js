@@ -1,8 +1,5 @@
-// import { Base } from './Base.js';
-
-class StringT /*extends Base*/ {
+class StringT {
   constructor(length, encoding = 'ascii') {
-    // super();
     this.length = length;
     this.encoding = encoding;
   }

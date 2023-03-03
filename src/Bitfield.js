@@ -1,9 +1,7 @@
-// import { Base } from './Base.js';
 import { Array as ArrayT } from './Array.js';
 
-export class Bitfield /*extends Base*/ {
+export class Bitfield {
   constructor(type, flags = []) {
-    // super();
     this.type = type;
     this.flags = flags;
   }

@@ -1,8 +1,5 @@
-// import { Base } from './Base.js';
-
-class ArrayT /*extends Base*/ {
+class ArrayT {
   constructor(type, length) {
-    // super();
     this.type = type;
     this.length = length;
   }

@@ -1,96 +1,95 @@
-// import { Base } from './Base.js';
 
-class Uint8 /*extends Base*/ {
+class Uint8 {
   size() { return 1; }
   decode(stream) { return stream.readUInt8(); }
   encode(stream, val) { stream.writeUInt8(val); }
 }
-class Int8 /*extends Base*/ {
+class Int8 {
   size() { return 1; }
   decode(stream) { return stream.readInt8(); }
   encode(stream, val) { stream.writeInt8(val); }
 }
 
-class UInt16BE /*extends Base*/ {
+class UInt16BE {
   size() { return 2; }
   decode(stream) { return stream.readUInt16BE(); }
   encode(stream, val) { stream.writeUInt16BE(val); }
 }
-class UInt16LE /*extends Base*/ {
+class UInt16LE {
   size() { return 2; }
   decode(stream) { return stream.readUInt16LE(); }
   encode(stream, val) { stream.writeUInt16LE(val); }
 }
-class Int16BE /*extends Base*/ {
+class Int16BE {
   size() { return 2; }
   decode(stream) { return stream.readInt16BE(); }
   encode(stream, val) { stream.writeInt16BE(val); }
 }
-class Int16LE /*extends Base*/ {
+class Int16LE {
   size() { return 2; }
   decode(stream) { return stream.readInt16LE(); }
   encode(stream, val) { stream.writeInt16LE(val); }
 }
 
-class UInt24BE /*extends Base*/ {
+class UInt24BE {
   size() { return 3; }
   decode(stream) { return stream.readUInt24BE(); }
   encode(stream, val) { stream.writeUInt24BE(val); }
 }
-class UInt24LE /*extends Base*/ {
+class UInt24LE {
   size() { return 3; }
   decode(stream) { return stream.readUInt24LE(); }
   encode(stream, val) { stream.writeUInt24LE(val); }
 }
-class Int24BE /*extends Base*/ {
+class Int24BE {
   size() { return 3; }
   decode(stream) { return stream.readInt24BE(); }
   encode(stream, val) { stream.writeInt24BE(val); }
 }
-class Int24LE /*extends Base*/ {
+class Int24LE {
   size() { return 3; }
   decode(stream) { return stream.readInt24LE(); }
   encode(stream, val) { stream.writeInt24LE(val); }
 }
 
-class UInt32BE /*extends Base*/ {
+class UInt32BE {
   size() { return 4; }
   decode(stream) { return stream.readUInt32BE(); }
   encode(stream, val) { stream.writeUInt32BE(val); }
 }
-class UInt32LE /*extends Base*/ {
+class UInt32LE {
   size() { return 4; }
   decode(stream) { return stream.readUInt32LE(); }
   encode(stream, val) { stream.writeUInt32LE(val); }
 }
-class Int32BE /*extends Base*/ {
+class Int32BE {
   size() { return 4; }
   decode(stream) { return stream.readInt32BE(); }
   encode(stream, val) { stream.writeInt32BE(val); }
 }
-class Int32LE /*extends Base*/ {
+class Int32LE {
   size() { return 4; }
   decode(stream) { return stream.readInt32LE(); }
   encode(stream, val) { stream.writeInt32LE(val); }
 }
 
-class FloatBE /*extends Base*/ {
+class FloatBE {
   size() { return 4; }
   decode(stream) { return stream.readFloatBE(); }
   encode(stream, val) { stream.writeFloatBE(val); }
 }
-class FloatLE /*extends Base*/ {
+class FloatLE {
   size() { return 4; }
   decode(stream) { return stream.readFloatLE(); }
   encode(stream, val) { stream.writeFloatLE(val); }
 }
 
-class DoubleBE /*extends Base*/ {
+class DoubleBE {
   size() { return 8; }
   decode(stream) { return stream.readDoubleBE(); }
   encode(stream, val) { stream.writeDoubleBE(val); }
 }
-class DoubleLE /*extends Base*/ {
+class DoubleLE {
   size() { return 8; }
   decode(stream) { return stream.readDoubleLE(); }
   encode(stream, val) { stream.writeDoubleLE(val); }
