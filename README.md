@@ -114,6 +114,7 @@ var color = new r.Enum(r.uint8, ['red', 'orange', 'yellow', 'green', 'blue', 'pu
 
 The `Bitfield` type maps a number to an object with boolean keys mapping to each bit in that number,
 as defined in an array.
+You can also use an Array type with a fixed length to describe long bitfields that don't fit in a number type.
 
 ```javascript
 var bitfield = new r.Bitfield(r.uint8, ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack']);
