@@ -77,14 +77,14 @@ describe('Array', function () {
 
     it('should use defined length if no value given', function () {
       const array = new ArrayT(uint8, 10);
-      assert.equal(array.size(), 10);
+      assert.equal(array.size, 10);
     });
   });
 
   describe('encode', function () {
     it('should encode using array length', function () {
       const array = new ArrayT(uint8, 10);
-      const buffer = new Uint8Array(array.size());
+      const buffer = new Uint8Array(array.size);
       const stream = new EncodeStream(buffer);
       array.encode(stream, [1, 2, 3, 4]);
       assert.deepEqual(buffer, new Uint8Array([1, 2, 3, 4, 0, 0, 0, 0, 0, 0]));

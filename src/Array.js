@@ -2,6 +2,7 @@ class ArrayT {
   constructor(type, length) {
     this.type = type;
     this.length = length;
+    this.size = type.size * length;
   }
 
   decode(stream) {
@@ -12,10 +13,6 @@ class ArrayT {
     }
 
     return res;
-  }
-
-  size() {
-    return this.type.size() * this.length
   }
 
   encode(stream, array) {

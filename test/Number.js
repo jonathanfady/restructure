@@ -23,17 +23,17 @@ describe('Number', function () {
       assert.equal(uint8.decode(stream), 0xff);
     });
 
-    it('should have a size', () => assert.equal(uint8.size(), 1));
+    it('should have a size', () => assert.equal(uint8.size, 1));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(uint8.size());
+      const buffer = new Uint8Array(uint8.size);
       const stream = new EncodeStream(buffer);
       uint8.encode(stream, 0xab);
       assert.deepEqual(buffer, new Uint8Array([0xab]));
     });
 
     it('should encode', function () {
-      const buffer = new Uint8Array(uint8.size());
+      const buffer = new Uint8Array(uint8.size);
       const stream = new EncodeStream(buffer);
       uint8.encode(stream, 0xff);
       assert.deepEqual(buffer, new Uint8Array([0xff]));
@@ -50,10 +50,10 @@ describe('Number', function () {
       assert.equal(uint16be.decode(stream), 0xabff);
     });
 
-    it('should have a size', () => assert.equal(uint16be.size(), 2));
+    it('should have a size', () => assert.equal(uint16be.size, 2));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(uint16be.size());
+      const buffer = new Uint8Array(uint16be.size);
       const stream = new EncodeStream(buffer);
       uint16be.encode(stream, 0xabff);
       assert.deepEqual(buffer, new Uint8Array([0xab, 0xff]));
@@ -66,10 +66,10 @@ describe('Number', function () {
       assert.equal(uint16le.decode(stream), 0xabff);
     });
 
-    it('should have a size', () => assert.equal(uint16le.size(), 2));
+    it('should have a size', () => assert.equal(uint16le.size, 2));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(uint16le.size());
+      const buffer = new Uint8Array(uint16le.size);
       const stream = new EncodeStream(buffer);
       uint16le.encode(stream, 0xabff);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab]));
@@ -86,10 +86,10 @@ describe('Number', function () {
       assert.equal(uint24be.decode(stream), 0xffab24);
     });
 
-    it('should have a size', () => assert.equal(uint24be.size(), 3));
+    it('should have a size', () => assert.equal(uint24be.size, 3));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(uint24be.size());
+      const buffer = new Uint8Array(uint24be.size);
       const stream = new EncodeStream(buffer);
       uint24be.encode(stream, 0xffab24);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24]));
@@ -102,10 +102,10 @@ describe('Number', function () {
       assert.equal(uint24le.decode(stream), 0xffab24);
     });
 
-    it('should have a size', () => assert.equal(uint24le.size(), 3));
+    it('should have a size', () => assert.equal(uint24le.size, 3));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(uint24le.size());
+      const buffer = new Uint8Array(uint24le.size);
       const stream = new EncodeStream(buffer);
       uint24le.encode(stream, 0xffab24);
       assert.deepEqual(buffer, new Uint8Array([0x24, 0xab, 0xff]));
@@ -122,10 +122,10 @@ describe('Number', function () {
       assert.equal(uint32be.decode(stream), 0xffab24bf);
     });
 
-    it('should have a size', () => assert.equal(uint32be.size(), 4));
+    it('should have a size', () => assert.equal(uint32be.size, 4));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(uint32be.size());
+      const buffer = new Uint8Array(uint32be.size);
       const stream = new EncodeStream(buffer);
       uint32be.encode(stream, 0xffab24bf);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
@@ -138,10 +138,10 @@ describe('Number', function () {
       assert.equal(uint32le.decode(stream), 0xffab24bf);
     });
 
-    it('should have a size', () => assert.equal(uint32le.size(), 4));
+    it('should have a size', () => assert.equal(uint32le.size, 4));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(uint32le.size());
+      const buffer = new Uint8Array(uint32le.size);
       const stream = new EncodeStream(buffer);
       uint32le.encode(stream, 0xffab24bf);
       assert.deepEqual(buffer, new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
@@ -155,16 +155,16 @@ describe('Number', function () {
       assert.equal(int8.decode(stream), -1);
     });
 
-    it('should have a size', () => assert.equal(int8.size(), 1));
+    it('should have a size', () => assert.equal(int8.size, 1));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(int8.size());
+      const buffer = new Uint8Array(int8.size);
       const stream = new EncodeStream(buffer);
       int8.encode(stream, 127);
       assert.deepEqual(buffer, new Uint8Array([0x7f]));
     });
     it('should encode', function () {
-      const buffer = new Uint8Array(int8.size());
+      const buffer = new Uint8Array(int8.size);
       const stream = new EncodeStream(buffer);
       int8.encode(stream, -1);
       assert.deepEqual(buffer, new Uint8Array([0xff]));
@@ -181,10 +181,10 @@ describe('Number', function () {
       assert.equal(int16be.decode(stream), -85);
     });
 
-    it('should have a size', () => assert.equal(int16be.size(), 2));
+    it('should have a size', () => assert.equal(int16be.size, 2));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(int16be.size());
+      const buffer = new Uint8Array(int16be.size);
       const stream = new EncodeStream(buffer);
       int16be.encode(stream, -85);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab]));
@@ -197,10 +197,10 @@ describe('Number', function () {
       assert.equal(int16le.decode(stream), -85);
     });
 
-    it('should have a size', () => assert.equal(int16le.size(), 2));
+    it('should have a size', () => assert.equal(int16le.size, 2));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(int16le.size());
+      const buffer = new Uint8Array(int16le.size);
       const stream = new EncodeStream(buffer);
       int16le.encode(stream, -85);
       assert.deepEqual(buffer, new Uint8Array([0xab, 0xff]));
@@ -217,10 +217,10 @@ describe('Number', function () {
       assert.equal(int24be.decode(stream), -21724);
     });
 
-    it('should have a size', () => assert.equal(int24be.size(), 3));
+    it('should have a size', () => assert.equal(int24be.size, 3));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(int24be.size());
+      const buffer = new Uint8Array(int24be.size);
       const stream = new EncodeStream(buffer);
       int24be.encode(stream, -21724);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24]));
@@ -233,10 +233,10 @@ describe('Number', function () {
       assert.equal(int24le.decode(stream), -21724);
     });
 
-    it('should have a size', () => assert.equal(int24le.size(), 3));
+    it('should have a size', () => assert.equal(int24le.size, 3));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(int24le.size());
+      const buffer = new Uint8Array(int24le.size);
       const stream = new EncodeStream(buffer);
       int24le.encode(stream, -21724);
       assert.deepEqual(buffer, new Uint8Array([0x24, 0xab, 0xff]));
@@ -253,10 +253,10 @@ describe('Number', function () {
       assert.equal(int32be.decode(stream), -5561153);
     });
 
-    it('should have a size', () => assert.equal(int32be.size(), 4));
+    it('should have a size', () => assert.equal(int32be.size, 4));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(int32be.size());
+      const buffer = new Uint8Array(int32be.size);
       const stream = new EncodeStream(buffer);
       int32be.encode(stream, -5561153);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
@@ -269,10 +269,10 @@ describe('Number', function () {
       assert.equal(int32le.decode(stream), -5561153);
     });
 
-    it('should have a size', () => assert.equal(int32le.size(), 4));
+    it('should have a size', () => assert.equal(int32le.size, 4));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(int32le.size());
+      const buffer = new Uint8Array(int32le.size);
       const stream = new EncodeStream(buffer);
       int32le.encode(stream, -5561153);
       assert.deepEqual(buffer, new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
@@ -291,10 +291,10 @@ describe('Number', function () {
       assert(value <= 250.55 + 0.005);
     });
 
-    it('should have a size', () => assert.equal(floatbe.size(), 4));
+    it('should have a size', () => assert.equal(floatbe.size, 4));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(floatbe.size());
+      const buffer = new Uint8Array(floatbe.size);
       const stream = new EncodeStream(buffer);
       floatbe.encode(stream, 250.55);
       assert.deepEqual(buffer, new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
@@ -309,10 +309,10 @@ describe('Number', function () {
       assert(value <= 250.55 + 0.005);
     });
 
-    it('should have a size', () => assert.equal(floatle.size(), 4));
+    it('should have a size', () => assert.equal(floatle.size, 4));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(floatle.size());
+      const buffer = new Uint8Array(floatle.size);
       const stream = new EncodeStream(buffer);
       floatle.encode(stream, 250.55);
       assert.deepEqual(buffer, new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
@@ -331,10 +331,10 @@ describe('Number', function () {
       assert(value <= 1234.56 + 0.005);
     });
 
-    it('should have a size', () => assert.equal(doublebe.size(), 8));
+    it('should have a size', () => assert.equal(doublebe.size, 8));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(doublebe.size());
+      const buffer = new Uint8Array(doublebe.size);
       const stream = new EncodeStream(buffer);
       doublebe.encode(stream, 1234.56);
       assert.deepEqual(buffer, new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
@@ -349,10 +349,10 @@ describe('Number', function () {
       assert(value <= 1234.56 + 0.005);
     });
 
-    it('should have a size', () => assert.equal(doublele.size(), 8));
+    it('should have a size', () => assert.equal(doublele.size, 8));
 
     it('should encode', function () {
-      const buffer = new Uint8Array(doublele.size());
+      const buffer = new Uint8Array(doublele.size);
       const stream = new EncodeStream(buffer);
       doublele.encode(stream, 1234.56);
       assert.deepEqual(buffer, new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));

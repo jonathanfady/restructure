@@ -109,7 +109,7 @@ describe('Struct', function () {
         age: uint8
       });
 
-      assert.equal(struct.size(), 5);
+      assert.equal(struct.size, 5);
     });
 
     // it('should throw when getting non-fixed length size and no value is given', function () {

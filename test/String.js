@@ -77,14 +77,14 @@ describe('String', function () {
 
     it('should use defined length if no value given', function () {
       const array = new StringT(10);
-      assert.equal(array.size(), 10);
+      assert.equal(array.size, 10);
     });
   });
 
   describe('encode', function () {
     it('should encode using string length', function () {
       const string = new StringT(7);
-      const buffer = new Uint8Array(string.size());
+      const buffer = new Uint8Array(string.size);
       const stream = new EncodeStream(buffer);
       string.encode(stream, 'testing');
       assert.deepEqual(buffer, Buffer.from('testing'));
@@ -102,7 +102,7 @@ describe('String', function () {
 
     it('should encode utf8', function () {
       const string = new StringT(4, 'utf8');
-      const buffer = new Uint8Array(string.size());
+      const buffer = new Uint8Array(string.size);
       const stream = new EncodeStream(buffer);
       string.encode(stream, '🍻');
       assert.deepEqual(buffer, Buffer.from('🍻'));

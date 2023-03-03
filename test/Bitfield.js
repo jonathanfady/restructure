@@ -23,7 +23,7 @@ describe('Bitfield', function () {
   const ZACK = 1 << 0;
   describe('bitfield1', function () {
     const bitfield1 = new Bitfield(uint8, ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack']);
-    it('should have the right size', () => assert.equal(bitfield1.size(), 1));
+    it('should have the right size', () => assert.equal(bitfield1.size, 1));
 
     it('should decode', function () {
       const stream = new DecodeStream(new Uint8Array([JACK | MACK | PACK | NACK | QUACK]));
@@ -34,7 +34,7 @@ describe('Bitfield', function () {
     });
 
     it('should encode', function () {
-      const buffer = new Uint8Array(bitfield1.size());
+      const buffer = new Uint8Array(bitfield1.size);
       const stream = new EncodeStream(buffer);
       bitfield1.encode(stream, { Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true });
       assert.deepEqual(buffer, Buffer.from([JACK | MACK | PACK | NACK | QUACK]));
@@ -44,7 +44,7 @@ describe('Bitfield', function () {
   describe('bitfield2', function () {
     const bitfield2 = new Bitfield(new ArrayT(uint8, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack', 'Rack', 'Sack', 'Tack', 'Uack', 'Vack', 'Wack', 'Xack', 'Yack']);
 
-    it('should have the right size', () => assert.equal(bitfield2.size(), 2));
+    it('should have the right size', () => assert.equal(bitfield2.size, 2));
 
     it('should decode', function () {
       const stream = new DecodeStream(new Uint8Array([JACK | MACK | NACK | PACK | QUACK, RACK | SACK | UACK | VACK | XACK]));
@@ -58,7 +58,7 @@ describe('Bitfield', function () {
     });
 
     it('should encode', function () {
-      const buffer = new Uint8Array(bitfield2.size());
+      const buffer = new Uint8Array(bitfield2.size);
       const stream = new EncodeStream(buffer);
       bitfield2.encode(stream, {
         Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true,
@@ -71,7 +71,7 @@ describe('Bitfield', function () {
   describe('bitfield3', function () {
     const bitfield3 = new Bitfield(new ArrayT(uint16le, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack', 'Rack', 'Sack', 'Tack', 'Uack', 'Vack', 'Wack', 'Xack', 'Yack', 'Zack']);
 
-    it('should have the right size', () => assert.equal(bitfield3.size(), 4));
+    it('should have the right size', () => assert.equal(bitfield3.size, 4));
 
     it('should decode', function () {
       const stream = new DecodeStream(new Uint16Array([JACK | MACK | NACK | PACK | QUACK | (UACK << 8), ZACK]));
@@ -86,7 +86,7 @@ describe('Bitfield', function () {
     });
 
     it('should encode', function () {
-      const buffer = new Uint8Array(bitfield3.size());
+      const buffer = new Uint8Array(bitfield3.size);
       const stream = new EncodeStream(buffer);
       bitfield3.encode(stream, {
         Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true,
