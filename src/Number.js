@@ -1,5 +1,5 @@
-import {DecodeStream} from './DecodeStream.js';
-import {Base} from './Base.js';
+import { DecodeStream } from './DecodeStream.js';
+import { Base } from './Base.js';
 
 class NumberT extends Base {
   constructor(type, endian = 'BE') {
@@ -25,7 +25,7 @@ class NumberT extends Base {
   }
 }
 
-export {NumberT as Number};
+export { NumberT as Number };
 
 export const uint8 = new NumberT('UInt8');
 export const uint16be = new NumberT('UInt16', 'BE');
@@ -54,24 +54,24 @@ export const doublebe = new NumberT('Double', 'BE');
 export const double = doublebe;
 export const doublele = new NumberT('Double', 'LE');
 
-export class Fixed extends NumberT {
-  constructor(size, endian, fracBits = size >> 1) {
-    super(`Int${size}`, endian);
-    this._point = 1 << fracBits;
-  }
+// export class Fixed extends NumberT {
+//   constructor(size, endian, fracBits = size >> 1) {
+//     super(`Int${size}`, endian);
+//     this._point = 1 << fracBits;
+//   }
 
-  decode(stream) {
-    return super.decode(stream) / this._point;
-  }
+//   decode(stream) {
+//     return super.decode(stream) / this._point;
+//   }
 
-  encode(stream, val) {
-    return super.encode(stream, (val * this._point) | 0);
-  }
-}
+//   encode(stream, val) {
+//     return super.encode(stream, (val * this._point) | 0);
+//   }
+// }
 
-export const fixed16be = new Fixed(16, 'BE');
-export const fixed16 = fixed16be;
-export const fixed16le = new Fixed(16, 'LE');
-export const fixed32be = new Fixed(32, 'BE');
-export const fixed32 = fixed32be;
-export const fixed32le = new Fixed(32, 'LE');
+// export const fixed16be = new Fixed(16, 'BE');
+// export const fixed16 = fixed16be;
+// export const fixed16le = new Fixed(16, 'LE');
+// export const fixed32be = new Fixed(32, 'BE');
+// export const fixed32 = fixed32be;
+// export const fixed32le = new Fixed(32, 'LE');

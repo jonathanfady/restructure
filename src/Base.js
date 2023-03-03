@@ -1,5 +1,5 @@
-import {DecodeStream} from './DecodeStream.js';
-import {EncodeStream} from './EncodeStream.js';
+import { DecodeStream } from './DecodeStream.js';
+import { EncodeStream } from './EncodeStream.js';
 
 export class Base {
   fromBuffer(buffer) {
@@ -8,7 +8,7 @@ export class Base {
   }
 
   toBuffer(value) {
-    let size = this.size(value);
+    let size = this.size(/*value*/);
     let buffer = new Uint8Array(size);
     let stream = new EncodeStream(buffer);
     this.encode(stream, value);
