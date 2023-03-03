@@ -1,6 +1,6 @@
 {
-  "name": "restructure",
-  "version": "3.0.0",
+  "name": "@jonathanfady/restructure",
+  "version": "0.0.1",
   "description": "Declaratively encode and decode binary data",
   "type": "module",
   "main": "./dist/main.cjs",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/devongovett/restructure.git"
+    "url": "git://github.com/jonathanfady/restructure.git"
   },
   "keywords": [
     "binary",
@@ -32,10 +32,10 @@
     "encode",
     "decode"
   ],
-  "author": "Devon Govett <devongovett@gmail.com>",
+  "author": "Jonathan Fady <jonathan.fady@gmail.com>, Devon Govett <devongovett@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/devongovett/restructure/issues"
+    "url": "https://github.com/jonathanfady/restructure/issues"
   },
-  "homepage": "https://github.com/devongovett/restructure"
+  "homepage": "https://github.com/jonathanfady/restructure"
 }
