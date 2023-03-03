@@ -50,7 +50,7 @@ class ArrayT extends Base {
     //   }
     // }
 
-    for (let i = 0, end = this.length; i < end; i++) {
+    for (let i = 0; i < this.length; i++) {
       res.push(this.type.decode(stream));
     }
 

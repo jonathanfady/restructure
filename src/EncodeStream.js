@@ -1,4 +1,4 @@
-import {DecodeStream} from './DecodeStream.js';
+// import { DecodeStream } from './DecodeStream.js';
 
 const textEncoder = new TextEncoder();
 const isBigEndian = new Uint8Array(new Uint16Array([0x1234]).buffer)[0] == 0x12;
@@ -72,15 +72,77 @@ export class EncodeStream {
     }
   }
 
-  fill(val, length) {
-    if (length < this.buffer.length) {
-      this.buffer.fill(val, this.pos, this.pos + length);
-      this.pos += length;
-    } else {
-      const buf = new Uint8Array(length);
-      buf.fill(val);
-      this.writeBuffer(buf);
-    }
+  // fill(val, length) {
+  //   if (length < this.buffer.length) {
+  //     this.buffer.fill(val, this.pos, this.pos + length);
+  //     this.pos += length;
+  //   } else {
+  //     const buf = new Uint8Array(length);
+  //     buf.fill(val);
+  //     this.writeBuffer(buf);
+  //   }
+  // }
+
+  // Hardcode everything
+  writeUInt8(value) {
+    this.view.setUint8(this.pos, value);
+    this.pos += 1;
+  }
+  writeInt8(value) {
+    this.view.setInt8(this.pos, value);
+    this.pos += 1;
+  }
+
+  writeUInt16BE(value) {
+    this.view.setUint16(this.pos, value);
+    this.pos += 2;
+  }
+  writeUInt16LE(value) {
+    this.view.setUint16(this.pos, value, true);
+    this.pos += 2;
+  }
+  writeInt16BE(value) {
+    this.view.setInt16(this.pos, value);
+    this.pos += 2;
+  }
+  writeInt16LE(value) {
+    this.view.setInt16(this.pos, value, true);
+    this.pos += 2;
+  }
+
+  writeUInt32BE(value) {
+    this.view.setUint32(this.pos, value);
+    this.pos += 4;
+  }
+  writeUInt32LE(value) {
+    this.view.setUint32(this.pos, value, true);
+    this.pos += 4;
+  }
+  writeInt32BE(value) {
+    this.view.setInt32(this.pos, value);
+    this.pos += 4;
+  }
+  writeInt32LE(value) {
+    this.view.setInt32(this.pos, value, true);
+    this.pos += 4;
+  }
+
+  writeFloatBE(value) {
+    this.view.setFloat32(this.pos, value);
+    this.pos += 4;
+  }
+  writeFloatLE(value) {
+    this.view.setFloat32(this.pos, value, true);
+    this.pos += 4;
+  }
+
+  writeDoubleBE(value) {
+    this.view.setFloat64(this.pos, value);
+    this.pos += 8;
+  }
+  writeDoubleLE(value) {
+    this.view.setFloat64(this.pos, value, true);
+    this.pos += 8;
   }
 }
 
@@ -105,25 +167,25 @@ function stringToAscii(string) {
   return buf;
 }
 
-for (let key of Object.getOwnPropertyNames(DataView.prototype)) {
-  if (key.slice(0, 3) === 'set') {
-    let type = key.slice(3).replace('Ui', 'UI');
-    if (type === 'Float32') {
-      type = 'Float';
-    } else if (type === 'Float64') {
-      type = 'Double';
-    }
-    let bytes = DecodeStream.TYPES[type];
-    EncodeStream.prototype['write' + type + (bytes === 1 ? '' : 'BE')] = function (value) {
-      this.view[key](this.pos, value, false);
-      this.pos += bytes;
-    };
+// for (let key of Object.getOwnPropertyNames(DataView.prototype)) {
+//   if (key.slice(0, 3) === 'set') {
+//     let type = key.slice(3).replace('Ui', 'UI');
+//     if (type === 'Float32') {
+//       type = 'Float';
+//     } else if (type === 'Float64') {
+//       type = 'Double';
+//     }
+//     let bytes = DecodeStream.TYPES[type];
+//     EncodeStream.prototype['write' + type + (bytes === 1 ? '' : 'BE')] = function (value) {
+//       this.view[key](this.pos, value, false);
+//       this.pos += bytes;
+//     };
 
-    if (bytes !== 1) {
-      EncodeStream.prototype['write' + type + 'LE'] = function (value) {
-        this.view[key](this.pos, value, true);
-        this.pos += bytes;
-      };
-    }
-  }
-}
+//     if (bytes !== 1) {
+//       EncodeStream.prototype['write' + type + 'LE'] = function (value) {
+//         this.view[key](this.pos, value, true);
+//         this.pos += bytes;
+//       };
+//     }
+//   }
+// }

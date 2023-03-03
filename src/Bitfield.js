@@ -1,6 +1,5 @@
 import { Base } from './Base.js';
 import { Array as ArrayT } from './Array.js';
-import { Number as NumberT } from './Number.js';
 
 export class Bitfield extends Base {
   constructor(type, flags = []) {
@@ -12,7 +11,7 @@ export class Bitfield extends Base {
   decode(stream) {
     const val = this.type.decode(stream);
 
-    if ((this.type instanceof ArrayT) && (this.type.type instanceof NumberT)) {
+    if (this.type instanceof ArrayT) {
       const res = {};
       const bitlength = this.type.type.size() * 8;
       for (let i = 0; i < this.flags.length; i++) {
@@ -45,7 +44,7 @@ export class Bitfield extends Base {
   }
 
   encode(stream, keys) {
-    if ((this.type instanceof ArrayT) && (this.type.type instanceof NumberT)) {
+    if (this.type instanceof ArrayT) {
       const vals = [];
       const bitlength = this.type.type.size() * 8;
       let val = 0;
@@ -64,17 +63,18 @@ export class Bitfield extends Base {
         vals.push(val);
       }
 
-      return this.type.encode(stream, vals);
-    }
-
-    let val = 0;
-    for (let i = 0; i < this.flags.length; i++) {
-      const flag = this.flags[i];
-      if (flag != null) {
-        if (keys[flag]) { val |= (1 << i); }
+      this.type.encode(stream, vals);
+    } else {
+      let val = 0;
+      for (let i = 0; i < this.flags.length; i++) {
+        const flag = this.flags[i];
+        if (flag != null) {
+          if (keys[flag]) { val |= (1 << i); }
+        }
       }
+
+      this.type.encode(stream, val);
     }
 
-    return this.type.encode(stream, val);
   }
 }

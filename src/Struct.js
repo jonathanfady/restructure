@@ -10,7 +10,11 @@ export class Struct extends Base {
   decode(stream/*, parent, length = 0*/) {
     // const res = this._setup(stream, parent, length);
     const res = {};
-    this._parseFields(stream, res);
+    // this._parseFields(stream, res);
+
+    for (let key in this.fields) {
+      res[key] = this.fields[key].decode(stream);
+    }
 
     // if (this.process != null) {
     //   this.process.call(res, stream);
@@ -32,30 +36,30 @@ export class Struct extends Base {
   //   return res;
   // }
 
-  _parseFields(stream, res/*, fields*/) {
-    for (let key in this.fields) {
-      // var val;
-      // const type = fields[key];
-      // if (typeof type === 'function') {
-      //   val = type.call(res, res);
-      // } else {
-      //   val = type.decode(stream, res);
-      // }
+  // _parseFields(stream, res/*, fields*/) {
+  //   for (let key in this.fields) {
+  //     // var val;
+  //     // const type = fields[key];
+  //     // if (typeof type === 'function') {
+  //     //   val = type.call(res, res);
+  //     // } else {
+  //     //   val = type.decode(stream, res);
+  //     // }
 
-      // if (val !== undefined) {
-      //   if (val instanceof utils.PropertyDescriptor) {
-      //     Object.defineProperty(res, key, val);
-      //   } else {
-      //     res[key] = val;
-      //   }
-      // }
+  //     // if (val !== undefined) {
+  //     //   if (val instanceof utils.PropertyDescriptor) {
+  //     //     Object.defineProperty(res, key, val);
+  //     //   } else {
+  //     //     res[key] = val;
+  //     //   }
+  //     // }
 
-      res[key] = this.fields[key].decode(stream/*, res*/);
+  //     res[key] = this.fields[key].decode(stream/*, res*/);
 
-      // res._currentOffset = stream.pos - res._startOffset;
-    }
+  //     // res._currentOffset = stream.pos - res._startOffset;
+  //   }
 
-  }
+  // }
 
   size(/*val, parent, includePointers = true*/) {
     // if (val == null) { val = {}; }
