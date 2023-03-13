@@ -1,4 +1,4 @@
-import { EncodeStream } from 'restructure';
+import { EncodeStream } from '@jonathanfady/restructure';
 import assert from 'assert';
 
 describe('EncodeStream', function () {

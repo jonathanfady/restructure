@@ -1,12 +1,12 @@
 import assert from 'assert';
-import { Array as ArrayT, uint8, uint16, DecodeStream, EncodeStream } from 'restructure';
+import { Array as ArrayT, uint8, uint16, DecodeStream, EncodeStream } from '@jonathanfady/restructure';
 
 describe('Array', function () {
   describe('decode', function () {
     it('should decode fixed length', function () {
       const array = new ArrayT(uint8, 4);
-      const stream = new DecodeStream(new Uint8Array([1, 2, 3, 4, 5]));
-      assert.deepEqual(array.decode(stream), [1, 2, 3, 4]);
+      global.decode_stream = new DecodeStream(new Uint8Array([1, 2, 3, 4, 5]));
+      assert.deepEqual(array.decode(), [1, 2, 3, 4]);
     });
 
     // it('should decode fixed amount of bytes', function () {
@@ -85,8 +85,8 @@ describe('Array', function () {
     it('should encode using array length', function () {
       const array = new ArrayT(uint8, 10);
       const buffer = new Uint8Array(array.size);
-      const stream = new EncodeStream(buffer);
-      array.encode(stream, [1, 2, 3, 4]);
+      global.encode_stream = new EncodeStream(buffer);
+      array.encode([1, 2, 3, 4]);
       assert.deepEqual(buffer, new Uint8Array([1, 2, 3, 4, 0, 0, 0, 0, 0, 0]));
     });
 

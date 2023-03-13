@@ -7,8 +7,8 @@ export class Bitfield {
     this.size = type.size;
   }
 
-  decode(stream) {
-    const val = this.type.decode(stream);
+  decode() {
+    const val = this.type.decode();
 
     if (this.type instanceof ArrayT) {
       const res = {};
@@ -38,7 +38,7 @@ export class Bitfield {
     return res;
   }
 
-  encode(stream, keys) {
+  encode(keys) {
     if (this.type instanceof ArrayT) {
       const vals = [];
       const bitlength = this.type.type.size * 8;
@@ -58,7 +58,7 @@ export class Bitfield {
         vals.push(val);
       }
 
-      this.type.encode(stream, vals);
+      this.type.encode(vals);
     } else {
       let val = 0;
       for (let i = 0; i < this.flags.length; i++) {
@@ -68,7 +68,7 @@ export class Bitfield {
         }
       }
 
-      this.type.encode(stream, val);
+      this.type.encode(val);
     }
   }
 }

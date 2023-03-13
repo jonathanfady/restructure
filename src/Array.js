@@ -5,19 +5,19 @@ class ArrayT {
     this.size = type.size * length;
   }
 
-  decode(stream) {
+  decode() {
     const res = [];
 
     for (let i = 0; i < this.length; i++) {
-      res.push(this.type.decode(stream));
+      res.push(this.type.decode());
     }
 
     return res;
   }
 
-  encode(stream, array) {
+  encode(array) {
     for (let item of array) {
-      this.type.encode(stream, item);
+      this.type.encode(item);
     }
   }
 }

@@ -5,12 +5,12 @@ class StringT {
     this.size = length;
   }
 
-  decode(stream) {
-    return stream.readString(this.length, this.encoding);
+  decode() {
+    return decode_stream.readString(this.length, this.encoding);
   }
 
-  encode(stream, val) {
-    stream.writeString(val, this.encoding);
+  encode(val) {
+    encode_stream.writeString(val, this.encoding);
   }
 }
 

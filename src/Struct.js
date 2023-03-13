@@ -12,23 +12,24 @@ export class Struct {
   }
 
   fromBuffer(buffer) {
+    global.decode_stream = new DecodeStream(buffer);
+
     const res = {};
 
-    const stream = new DecodeStream(buffer);
-
     for (let key in this.fields) {
-      res[key] = this.fields[key].decode(stream);
+      res[key] = this.fields[key].decode();
     }
 
     return res;
   }
 
   toBuffer(value) {
+    global.encode_stream = new EncodeStream(buffer);
+
     const buffer = new Uint8Array(this.size);
-    const stream = new EncodeStream(buffer);
 
     for (let key in this.fields) {
-      this.fields[key].encode(stream, value[key]);
+      this.fields[key].encode(value[key]);
     }
 
     return buffer;

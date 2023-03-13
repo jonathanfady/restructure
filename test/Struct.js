@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Bitfield, Struct, String as StringT, uint8, uint16le, uint32le, DecodeStream, EncodeStream } from 'restructure';
+import { Bitfield, Struct, String as StringT, uint8, uint16le, uint32le, DecodeStream, EncodeStream } from '@jonathanfady/restructure';
 
 describe('Struct', function () {
   describe('decode', function () {
