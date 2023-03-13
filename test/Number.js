@@ -18,7 +18,7 @@ import assert from 'assert';
 describe('Number', function () {
   describe('uint8', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xab, 0xff]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xab, 0xff]));
       assert.equal(uint8.decode(), 0xab);
       assert.equal(uint8.decode(), 0xff);
     });
@@ -27,14 +27,14 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(uint8.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       uint8.encode(0xab);
       assert.deepEqual(buffer, new Uint8Array([0xab]));
     });
 
     it('should encode', function () {
       const buffer = new Uint8Array(uint8.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       uint8.encode(0xff);
       assert.deepEqual(buffer, new Uint8Array([0xff]));
     });
@@ -46,7 +46,7 @@ describe('Number', function () {
 
   describe('uint16be', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xab, 0xff]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xab, 0xff]));
       assert.equal(uint16be.decode(), 0xabff);
     });
 
@@ -54,7 +54,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(uint16be.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       uint16be.encode(0xabff);
       assert.deepEqual(buffer, new Uint8Array([0xab, 0xff]));
     });
@@ -62,7 +62,7 @@ describe('Number', function () {
 
   describe('uint16le', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab]));
       assert.equal(uint16le.decode(), 0xabff);
     });
 
@@ -70,7 +70,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(uint16le.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       uint16le.encode(0xabff);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab]));
     });
@@ -82,7 +82,7 @@ describe('Number', function () {
 
   describe('uint24be', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab, 0x24]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab, 0x24]));
       assert.equal(uint24be.decode(), 0xffab24);
     });
 
@@ -90,7 +90,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(uint24be.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       uint24be.encode(0xffab24);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24]));
     });
@@ -98,7 +98,7 @@ describe('Number', function () {
 
   describe('uint24le', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0x24, 0xab, 0xff]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0x24, 0xab, 0xff]));
       assert.equal(uint24le.decode(), 0xffab24);
     });
 
@@ -106,7 +106,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(uint24le.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       uint24le.encode(0xffab24);
       assert.deepEqual(buffer, new Uint8Array([0x24, 0xab, 0xff]));
     });
@@ -118,7 +118,7 @@ describe('Number', function () {
 
   describe('uint32be', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
       assert.equal(uint32be.decode(), 0xffab24bf);
     });
 
@@ -126,7 +126,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(uint32be.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       uint32be.encode(0xffab24bf);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
     });
@@ -134,7 +134,7 @@ describe('Number', function () {
 
   describe('uint32le', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
       assert.equal(uint32le.decode(), 0xffab24bf);
     });
 
@@ -142,7 +142,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(uint32le.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       uint32le.encode(0xffab24bf);
       assert.deepEqual(buffer, new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
     });
@@ -150,7 +150,7 @@ describe('Number', function () {
 
   describe('int8', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0x7f, 0xff]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0x7f, 0xff]));
       assert.equal(int8.decode(), 127);
       assert.equal(int8.decode(), -1);
     });
@@ -159,13 +159,13 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(int8.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       int8.encode(127);
       assert.deepEqual(buffer, new Uint8Array([0x7f]));
     });
     it('should encode', function () {
       const buffer = new Uint8Array(int8.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       int8.encode(-1);
       assert.deepEqual(buffer, new Uint8Array([0xff]));
     });
@@ -177,7 +177,7 @@ describe('Number', function () {
 
   describe('int16be', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab]));
       assert.equal(int16be.decode(), -85);
     });
 
@@ -185,7 +185,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(int16be.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       int16be.encode(-85);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab]));
     });
@@ -193,7 +193,7 @@ describe('Number', function () {
 
   describe('int16le', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xab, 0xff]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xab, 0xff]));
       assert.equal(int16le.decode(), -85);
     });
 
@@ -201,7 +201,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(int16le.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       int16le.encode(-85);
       assert.deepEqual(buffer, new Uint8Array([0xab, 0xff]));
     });
@@ -213,7 +213,7 @@ describe('Number', function () {
 
   describe('int24be', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab, 0x24]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab, 0x24]));
       assert.equal(int24be.decode(), -21724);
     });
 
@@ -221,7 +221,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(int24be.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       int24be.encode(-21724);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24]));
     });
@@ -229,7 +229,7 @@ describe('Number', function () {
 
   describe('int24le', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0x24, 0xab, 0xff]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0x24, 0xab, 0xff]));
       assert.equal(int24le.decode(), -21724);
     });
 
@@ -237,7 +237,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(int24le.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       int24le.encode(-21724);
       assert.deepEqual(buffer, new Uint8Array([0x24, 0xab, 0xff]));
     });
@@ -249,7 +249,7 @@ describe('Number', function () {
 
   describe('int32be', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
       assert.equal(int32be.decode(), -5561153);
     });
 
@@ -257,7 +257,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(int32be.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       int32be.encode(-5561153);
       assert.deepEqual(buffer, new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
     });
@@ -265,7 +265,7 @@ describe('Number', function () {
 
   describe('int32le', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
       assert.equal(int32le.decode(), -5561153);
     });
 
@@ -273,7 +273,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(int32le.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       int32le.encode(-5561153);
       assert.deepEqual(buffer, new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
     });
@@ -285,7 +285,7 @@ describe('Number', function () {
 
   describe('floatbe', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
       const value = floatbe.decode();
       assert(value >= 250.55 - 0.005);
       assert(value <= 250.55 + 0.005);
@@ -295,7 +295,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(floatbe.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       floatbe.encode(250.55);
       assert.deepEqual(buffer, new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
     });
@@ -303,7 +303,7 @@ describe('Number', function () {
 
   describe('floatle', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
       const value = floatle.decode();
       assert(value >= 250.55 - 0.005);
       assert(value <= 250.55 + 0.005);
@@ -313,7 +313,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(floatle.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       floatle.encode(250.55);
       assert.deepEqual(buffer, new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
     });
@@ -325,7 +325,7 @@ describe('Number', function () {
 
   describe('doublebe', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
       const value = doublebe.decode();
       assert(value >= 1234.56 - 0.005);
       assert(value <= 1234.56 + 0.005);
@@ -335,7 +335,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(doublebe.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       doublebe.encode(1234.56);
       assert.deepEqual(buffer, new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
     });
@@ -343,7 +343,7 @@ describe('Number', function () {
 
   describe('doublele', function () {
     it('should decode', function () {
-      global.decode_stream = new DecodeStream(new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
       const value = doublele.decode();
       assert(value >= 1234.56 - 0.005);
       assert(value <= 1234.56 + 0.005);
@@ -353,7 +353,7 @@ describe('Number', function () {
 
     it('should encode', function () {
       const buffer = new Uint8Array(doublele.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       doublele.encode(1234.56);
       assert.deepEqual(buffer, new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
     });

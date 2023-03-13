@@ -5,12 +5,12 @@ describe('String', function () {
   describe('decode', function () {
     it('should decode fixed length', function () {
       const string = new StringT(7);
-      global.decode_stream = new DecodeStream(Buffer.from('testing'));
+      globalThis.decode_stream = new DecodeStream(Buffer.from('testing'));
       assert.equal(string.decode(), 'testing');
     });
 
     // it('should decode length from parent key', function() {
-    //   global.decode_stream = new DecodeStream(Buffer.from('testing'));
+    //   globalThis.decode_stream = new DecodeStream(Buffer.from('testing'));
     //   const string = new StringT('len');
     //   assert.equal(string.decode(stream, {len: 7}), 'testing');
     // });
@@ -22,7 +22,7 @@ describe('String', function () {
 
     it('should decode utf8', function () {
       const string = new StringT(4, 'utf8');
-      global.decode_stream = new DecodeStream(Buffer.from('🍻'));
+      globalThis.decode_stream = new DecodeStream(Buffer.from('🍻'));
       assert.equal(string.decode(), '🍻');
     });
 
@@ -32,7 +32,7 @@ describe('String', function () {
     // });
 
     // it('should decode null-terminated string and read past terminator', function() {
-    //   global.decode_stream = new DecodeStream(Buffer.from('🍻\x00'));
+    //   globalThis.decode_stream = new DecodeStream(Buffer.from('🍻\x00'));
     //   const string = new StringT(null, 'utf8');
     //   assert.equal(string.decode(), '🍻');
     //   assert.equal(stream.pos, 5);
@@ -85,7 +85,7 @@ describe('String', function () {
     it('should encode using string length', function () {
       const string = new StringT(7);
       const buffer = new Uint8Array(string.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       string.encode('testing');
       assert.deepEqual(buffer, Buffer.from('testing'));
     });
@@ -103,7 +103,7 @@ describe('String', function () {
     it('should encode utf8', function () {
       const string = new StringT(4, 'utf8');
       const buffer = new Uint8Array(string.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       string.encode('🍻');
       assert.deepEqual(buffer, Buffer.from('🍻'));
     });

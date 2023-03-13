@@ -5,7 +5,7 @@ describe('Array', function () {
   describe('decode', function () {
     it('should decode fixed length', function () {
       const array = new ArrayT(uint8, 4);
-      global.decode_stream = new DecodeStream(new Uint8Array([1, 2, 3, 4, 5]));
+      globalThis.decode_stream = new DecodeStream(new Uint8Array([1, 2, 3, 4, 5]));
       assert.deepEqual(array.decode(), [1, 2, 3, 4]);
     });
 
@@ -85,7 +85,7 @@ describe('Array', function () {
     it('should encode using array length', function () {
       const array = new ArrayT(uint8, 10);
       const buffer = new Uint8Array(array.size);
-      global.encode_stream = new EncodeStream(buffer);
+      globalThis.encode_stream = new EncodeStream(buffer);
       array.encode([1, 2, 3, 4]);
       assert.deepEqual(buffer, new Uint8Array([1, 2, 3, 4, 0, 0, 0, 0, 0, 0]));
     });

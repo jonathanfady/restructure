@@ -12,7 +12,7 @@ export class Struct {
   }
 
   fromBuffer(buffer) {
-    global.decode_stream = new DecodeStream(buffer);
+    globalThis.decode_stream = new DecodeStream(buffer);
 
     const res = {};
 
@@ -24,9 +24,9 @@ export class Struct {
   }
 
   toBuffer(value) {
-    global.encode_stream = new EncodeStream(buffer);
-
     const buffer = new Uint8Array(this.size);
+
+    globalThis.encode_stream = new EncodeStream(buffer);
 
     for (let key in this.fields) {
       this.fields[key].encode(value[key]);
