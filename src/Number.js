@@ -1,95 +1,95 @@
 
-class Uint8 {
+export class Uint8 {
   size = 1;
   decode() { return decode_stream.readUInt8(); }
   encode(val) { encode_stream.writeUInt8(val); }
 }
-class Int8 {
+export class Int8 {
   size = 1;
   decode() { return decode_stream.readInt8(); }
   encode(val) { encode_stream.writeInt8(val); }
 }
 
-class UInt16BE {
+export class UInt16BE {
   size = 2;
   decode() { return decode_stream.readUInt16BE(); }
   encode(val) { encode_stream.writeUInt16BE(val); }
 }
-class UInt16LE {
+export class UInt16LE {
   size = 2;
   decode() { return decode_stream.readUInt16LE(); }
   encode(val) { encode_stream.writeUInt16LE(val); }
 }
-class Int16BE {
+export class Int16BE {
   size = 2;
   decode() { return decode_stream.readInt16BE(); }
   encode(val) { encode_stream.writeInt16BE(val); }
 }
-class Int16LE {
+export class Int16LE {
   size = 2;
   decode() { return decode_stream.readInt16LE(); }
   encode(val) { encode_stream.writeInt16LE(val); }
 }
 
-class UInt24BE {
+export class UInt24BE {
   size = 3;
   decode() { return decode_stream.readUInt24BE(); }
   encode(val) { encode_stream.writeUInt24BE(val); }
 }
-class UInt24LE {
+export class UInt24LE {
   size = 3;
   decode() { return decode_stream.readUInt24LE(); }
   encode(val) { encode_stream.writeUInt24LE(val); }
 }
-class Int24BE {
+export class Int24BE {
   size = 3;
   decode() { return decode_stream.readInt24BE(); }
   encode(val) { encode_stream.writeInt24BE(val); }
 }
-class Int24LE {
+export class Int24LE {
   size = 3;
   decode() { return decode_stream.readInt24LE(); }
   encode(val) { encode_stream.writeInt24LE(val); }
 }
 
-class UInt32BE {
+export class UInt32BE {
   size = 4;
   decode() { return decode_stream.readUInt32BE(); }
   encode(val) { encode_stream.writeUInt32BE(val); }
 }
-class UInt32LE {
+export class UInt32LE {
   size = 4;
   decode() { return decode_stream.readUInt32LE(); }
   encode(val) { encode_stream.writeUInt32LE(val); }
 }
-class Int32BE {
+export class Int32BE {
   size = 4;
   decode() { return decode_stream.readInt32BE(); }
   encode(val) { encode_stream.writeInt32BE(val); }
 }
-class Int32LE {
+export class Int32LE {
   size = 4;
   decode() { return decode_stream.readInt32LE(); }
   encode(val) { encode_stream.writeInt32LE(val); }
 }
 
-class FloatBE {
+export class FloatBE {
   size = 4;
   decode() { return decode_stream.readFloatBE(); }
   encode(val) { encode_stream.writeFloatBE(val); }
 }
-class FloatLE {
+export class FloatLE {
   size = 4;
   decode() { return decode_stream.readFloatLE(); }
   encode(val) { encode_stream.writeFloatLE(val); }
 }
 
-class DoubleBE {
+export class DoubleBE {
   size = 8;
   decode() { return decode_stream.readDoubleBE(); }
   encode(val) { encode_stream.writeDoubleBE(val); }
 }
-class DoubleLE {
+export class DoubleLE {
   size = 8;
   decode() { return decode_stream.readDoubleLE(); }
   encode(val) { encode_stream.writeDoubleLE(val); }
