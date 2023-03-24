@@ -12,7 +12,6 @@ const textEncoder = new TextEncoder();
 const isBigEndian = new Uint8Array(new Uint16Array([0x1234]).buffer)[0] == 0x12;
 
 export class Struct {
-
   static sizeUInt8 = 1;
   static sizeInt8 = 1;
   static sizeUInt16BE = 2;
@@ -61,10 +60,6 @@ export class Struct {
 
     const res = {};
 
-    // for (let key in this.fields) {
-    //   res[key] = this.decode(this.fields[key]);
-    //   // res[key] = this.fields[key].decode();
-    // }
     Object.entries(this.fields).forEach(([k, v]) => {
       res[k] = this.decode(v);
     })
@@ -76,10 +71,6 @@ export class Struct {
     this.view = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
     this.pos_2 = 0;
 
-    // for (let key in this.fields) {
-    //   this.encode(this.fields[key], value[key]);
-    //   // this.fields[key].encode(value[key]);
-    // }
     Object.entries(this.fields).forEach(([k, v]) => {
       this.encode(v, value[k]);
     })

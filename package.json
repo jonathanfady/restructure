@@ -1,6 +1,6 @@
 {
   "name": "@jonathanfady/restructure",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Declaratively encode and decode binary data",
   "type": "module",
   "main": "./dist/main.cjs",
