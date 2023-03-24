@@ -1,8 +1,10 @@
+import { Struct } from './Struct.js';
+
 class ArrayT {
   constructor(type, length) {
     this.type = type;
     this.length = length;
-    this.size = type.size * length;
+    this.size = Struct[`size${type}`] * length;
   }
 
   decode() {

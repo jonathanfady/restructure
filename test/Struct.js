@@ -112,6 +112,27 @@ describe('Struct', function () {
       assert.equal(struct.size, 5);
     });
 
+    it('should get the correct size', function () {
+      const struct = new Struct({
+        name: new StringT(6),
+        age: uint8,
+        true_age: uint8,
+      });
+
+      assert.equal(struct.size, 8);
+    });
+
+    it('should get the correct size (integers and bitfields)', function () {
+      const struct = new Struct({
+        age: uint8,
+        height: uint16le,
+        flags: new Bitfield(uint16le, ["one", "two", null, "three", null, null, null, "four", null, null, "five", "six"]),
+        length: uint32le,
+      });
+
+      assert.equal(struct.size, 9);
+    });
+
     // it('should throw when getting non-fixed length size and no value is given', function () {
     //   const struct = new Struct({
     //     name: new StringT(uint8),
