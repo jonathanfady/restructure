@@ -218,7 +218,7 @@ describe('Struct', function () {
       const buf = struct.toBuffer({
         age: 21,
         height: 0x2252,
-        flags: { "one": true, "two": false, "three": false, "four": true, "five": true, "six": false },
+        "one": true, "two": false, "three": false, "four": true, "five": true, "six": false,
         length: 0x63881205
       });
 

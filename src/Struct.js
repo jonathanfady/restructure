@@ -82,7 +82,7 @@ export class Struct {
       if (v instanceof ArrayT) {
         this.writeArray(v.type, value[k])
       } else if (v instanceof Bitfield) {
-        this.writeBitfield(v.type, v.flags, value[k])
+        this.writeBitfield(v.type, v.flags, value)
       } else if (v instanceof StringT) {
         this.writeString(value[k], v.encoding)
       } else {
