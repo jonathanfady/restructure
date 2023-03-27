@@ -51,6 +51,7 @@ export class Struct {
     this.view = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
     this.pos_1 = 0;
     this.pos_2 = 0;
+    this.res = {};
   }
 
   fromBuffer(buffer) {
@@ -58,13 +59,11 @@ export class Struct {
     this.view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     this.pos_1 = 0;
 
-    const res = {};
-
     Object.entries(this.fields).forEach(([k, v]) => {
-      res[k] = this.decode(v);
+      this.res[k] = this.decode(v);
     })
 
-    return res;
+    return this.res;
   }
 
   toBuffer(value) {
@@ -112,15 +111,16 @@ export class Struct {
       const value = this.readArray(type.type, type.length);
       const bitlength = Struct[`size${type.type}`] * 8;
 
-      return flags.reduce((prev, curr, i) => {
-        const j = i % bitlength;
-        if (curr != null) {
-          prev[curr] = !!(value[0] & (1 << j));
+      let flag_i = 0;
+
+      return value.reduce((prev, curr) => {
+        for (let i = 0; i < bitlength; i++) {
+          if (flags[flag_i] != null) {
+            prev[flags[flag_i]] = !!(curr & (1 << i))
+          }
+          flag_i++;
         }
-        if (j == (bitlength - 1)) {
-          value.shift()
-        }
-        return prev;
+        return prev
       }, {})
     } else {
       const value = this[`read${type}`]();
