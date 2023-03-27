@@ -2,14 +2,8 @@ import { Array as ArrayT } from './Array.js';
 import { Bitfield } from './Bitfield.js';
 import { String as StringT } from './String.js';
 
-// Node back-compat.
-const ENCODING_MAPPING = {
-  utf16le: 'utf-16le',
-  ucs2: 'utf-16le',
-  utf16be: 'utf-16be'
-}
+const textDecoder = new TextDecoder();
 const textEncoder = new TextEncoder();
-const isBigEndian = new Uint8Array(new Uint16Array([0x1234]).buffer)[0] == 0x12;
 
 export class Struct {
   static sizeUInt8 = 1;
@@ -61,15 +55,15 @@ export class Struct {
 
     Object.entries(this.fields).forEach(([k, v]) => {
       if (v instanceof ArrayT) {
-        this.res[k] = this.readArray(v.type, v.length)
+        this.res[k] = this.readArray(v.type, v.length);
       } else if (v instanceof Bitfield) {
-        this.readBitfield(v.type, v.flags)
+        this.readBitfield(v.type, v.flags);
       } else if (v instanceof StringT) {
-        this.res[k] = this.readString(v.length, v.encoding)
+        this.res[k] = this.readString(v.size);
       } else {
-        this.res[k] = this[`read${v}`]()
+        this.res[k] = this[`read${v}`]();
       }
-    })
+    });
 
     return this.res;
   }
@@ -80,15 +74,15 @@ export class Struct {
 
     Object.entries(this.fields).forEach(([k, v]) => {
       if (v instanceof ArrayT) {
-        this.writeArray(v.type, value[k])
+        this.writeArray(v.type, value[k]);
       } else if (v instanceof Bitfield) {
-        this.writeBitfield(v.type, v.flags, value)
+        this.writeBitfield(v.type, v.flags, value);
       } else if (v instanceof StringT) {
-        this.writeString(value[k], v.encoding)
+        this.writeString(value[k]);
       } else {
-        this[`write${v}`](value[k])
+        this[`write${v}`](value[k]);
       }
-    })
+    });
 
     return this.buffer;
   }
@@ -119,7 +113,7 @@ export class Struct {
 
   // DecodeStream
   readArray(type, length) {
-    return Array.from({ length: length }, () => this[`read${type}`]())
+    return Array.from({ length: length }, () => this[`read${type}`]());
   }
 
   readBitfield(type, flags) {
@@ -132,7 +126,7 @@ export class Struct {
       value.forEach((value) => {
         for (let i = 0; i < bitlength; i++) {
           if (flags[flag_i] != null) {
-            this.res[flags[flag_i]] = !!(value & (1 << i))
+            this.res[flags[flag_i]] = !!(value & (1 << i));
           }
           flag_i++;
         }
@@ -148,23 +142,22 @@ export class Struct {
     }
   }
 
-  readString(length, encoding = 'ascii') {
-    encoding = ENCODING_MAPPING[encoding] || encoding;
+  readString(length) {
+    const buf = this.view.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length);
+    this.pos_1 += length;
 
-    const buf = this.readBuffer(length);
     try {
-      const decoder = new TextDecoder(encoding);
-      return decoder.decode(buf);
+      return textDecoder.decode(buf);
     } catch (err) {
       return buf;
     }
   }
 
-  readBuffer(length) {
-    const buf = this.view.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length);
-    this.pos_1 += length;
-    return buf;
-  }
+  // readBuffer(length) {
+  //   const buf = this.view.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length);
+  //   this.pos_1 += length;
+  //   return buf;
+  // }
 
   readUInt8() {
     const ret = this.view.getUint8(this.pos_1);
@@ -279,7 +272,8 @@ export class Struct {
           values.push(value);
           value = 0;
         }
-      })
+      });
+
       if ((flags.length % bitlength) != 0) {
         values.push(value);
       }
@@ -292,39 +286,39 @@ export class Struct {
         if (flag != null) {
           if (keys[flag]) { value |= (1 << i); }
         }
-      })
+      });
 
       this[`write${type}`](value);
     }
   }
 
-  writeString(string, encoding = 'ascii') {
-    let buf;
-    switch (encoding) {
-      case 'ascii':
-        buf = stringToAscii(string);
-        break;
+  writeString(string) {
+    // let buf;
+    // switch (encoding) {
+    //   case 'ascii':
+    //     buf = stringToAscii(string);
+    //     break;
 
-      case 'utf16le':
-      case 'utf16-le':
-      case 'ucs2': // node treats this the same as utf16.
-        buf = stringToUtf16(string, isBigEndian);
-        break;
+    //   case 'utf16le':
+    //   case 'utf16-le':
+    //   case 'ucs2': // node treats this the same as utf16.
+    //     buf = stringToUtf16(string, isBigEndian);
+    //     break;
 
-      case 'utf16be':
-      case 'utf16-be':
-        buf = stringToUtf16(string, !isBigEndian);
-        break;
+    //   case 'utf16be':
+    //   case 'utf16-be':
+    //     buf = stringToUtf16(string, !isBigEndian);
+    //     break;
 
-      case 'utf8':
-        buf = textEncoder.encode(string);
-        break;
+    //   case 'utf8':
+    //     buf = textEncoder.encode(string);
+    //     break;
 
-      default:
-        throw new Error(`Unsupported encoding: ${encoding}`);
-    }
+    //   default:
+    //     throw new Error(`Unsupported encoding: ${encoding}`);
+    // }
 
-    this.writeBuffer(buf);
+    this.writeBuffer(textEncoder.encode(string));
   }
 
   writeBuffer(buffer) {
@@ -422,23 +416,23 @@ export class Struct {
   }
 }
 
-function stringToUtf16(string, swap) {
-  let buf = new Uint16Array(string.length);
-  for (let i = 0; i < string.length; i++) {
-    let code = string.charCodeAt(i);
-    if (swap) {
-      code = (code >> 8) | ((code & 0xff) << 8);
-    }
-    buf[i] = code;
-  }
-  return new Uint8Array(buf.buffer);
-}
+// function stringToUtf16(string, swap) {
+//   let buf = new Uint16Array(string.length);
+//   for (let i = 0; i < string.length; i++) {
+//     let code = string.charCodeAt(i);
+//     if (swap) {
+//       code = (code >> 8) | ((code & 0xff) << 8);
+//     }
+//     buf[i] = code;
+//   }
+//   return new Uint8Array(buf.buffer);
+// }
 
-function stringToAscii(string) {
-  let buf = new Uint8Array(string.length);
-  for (let i = 0; i < string.length; i++) {
-    // Match node.js behavior - encoding allows 8-bit rather than 7-bit.
-    buf[i] = string.charCodeAt(i);
-  }
-  return buf;
-}
+// function stringToAscii(string) {
+//   let buf = new Uint8Array(string.length);
+//   for (let i = 0; i < string.length; i++) {
+//     // Match node.js behavior - encoding allows 8-bit rather than 7-bit.
+//     buf[i] = string.charCodeAt(i);
+//   }
+//   return buf;
+// }

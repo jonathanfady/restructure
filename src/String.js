@@ -1,7 +1,5 @@
 class StringT {
-  constructor(length, encoding = 'ascii') {
-    this.length = length;
-    this.encoding = encoding;
+  constructor(length) {
     this.size = length;
   }
 }

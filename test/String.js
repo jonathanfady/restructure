@@ -20,7 +20,7 @@ describe('String', function () {
     // });
 
     it('should decode utf8', function () {
-      const string = new Struct({ string: new StringT(4, 'utf8') });
+      const string = new Struct({ string: new StringT(4) });
       assert.deepEqual(string.fromBuffer(Buffer.from('🍻')), { string: '🍻' });
     });
 
@@ -96,7 +96,7 @@ describe('String', function () {
     // });
 
     it('should encode utf8', function () {
-      const string = new Struct({ string: new StringT(4, 'utf8') });
+      const string = new Struct({ string: new StringT(4) });
       assert.deepEqual(string.toBuffer({ string: '🍻' }), Buffer.from('🍻'));
     });
 

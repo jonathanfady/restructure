@@ -5,7 +5,7 @@ export class Bitfield {
   constructor(type, flags = []) {
     this.type = type;
     this.flags = flags;
-    if (this.type instanceof ArrayT)
+    if (type instanceof ArrayT)
       this.size = type.size;
     else
       this.size = Struct[`size${type}`];
