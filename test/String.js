@@ -1,12 +1,11 @@
 import assert from 'assert';
-import { String as StringT, uint8, DecodeStream, EncodeStream } from '@jonathanfady/restructure';
+import { String as StringT, Struct } from '@jonathanfady/restructure';
 
 describe('String', function () {
   describe('decode', function () {
     it('should decode fixed length', function () {
-      const string = new StringT(7);
-      globalThis.decode_stream = new DecodeStream(Buffer.from('testing'));
-      assert.equal(string.decode(), 'testing');
+      const string = new Struct({ string: new StringT(7) });
+      assert.deepEqual(string.fromBuffer(Buffer.from('testing')), { string: 'testing' });
     });
 
     // it('should decode length from parent key', function() {
@@ -21,9 +20,8 @@ describe('String', function () {
     // });
 
     it('should decode utf8', function () {
-      const string = new StringT(4, 'utf8');
-      globalThis.decode_stream = new DecodeStream(Buffer.from('🍻'));
-      assert.equal(string.decode(), '🍻');
+      const string = new Struct({ string: new StringT(4, 'utf8') });
+      assert.deepEqual(string.fromBuffer(Buffer.from('🍻')), { string: '🍻' });
     });
 
     // it('should decode encoding computed from function', function() {
@@ -76,18 +74,15 @@ describe('String', function () {
     // });
 
     it('should use defined length if no value given', function () {
-      const array = new StringT(10);
-      assert.equal(array.size, 10);
+      const string = new Struct({ string: new StringT(10) });
+      assert.equal(string.size, 10);
     });
   });
 
   describe('encode', function () {
     it('should encode using string length', function () {
-      const string = new StringT(7);
-      const buffer = new Uint8Array(string.size);
-      globalThis.encode_stream = new EncodeStream(buffer);
-      string.encode('testing');
-      assert.deepEqual(buffer, Buffer.from('testing'));
+      const string = new Struct({ string: new StringT(7) });
+      assert.deepEqual(string.toBuffer({ string: 'testing' }), Buffer.from('testing'));
     });
 
     // it('should encode length as number before string', function () {
@@ -101,11 +96,8 @@ describe('String', function () {
     // });
 
     it('should encode utf8', function () {
-      const string = new StringT(4, 'utf8');
-      const buffer = new Uint8Array(string.size);
-      globalThis.encode_stream = new EncodeStream(buffer);
-      string.encode('🍻');
-      assert.deepEqual(buffer, Buffer.from('🍻'));
+      const string = new Struct({ string: new StringT(4, 'utf8') });
+      assert.deepEqual(string.toBuffer({ string: '🍻' }), Buffer.from('🍻'));
     });
 
     // it('should encode encoding computed from function', function () {

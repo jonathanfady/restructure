@@ -1,12 +1,11 @@
 import assert from 'assert';
-import { Array as ArrayT, uint8, uint16, DecodeStream, EncodeStream } from '@jonathanfady/restructure';
+import { Array as ArrayT, Struct, uint8 } from '@jonathanfady/restructure';
 
 describe('Array', function () {
   describe('decode', function () {
     it('should decode fixed length', function () {
-      const array = new ArrayT(uint8, 4);
-      globalThis.decode_stream = new DecodeStream(new Uint8Array([1, 2, 3, 4, 5]));
-      assert.deepEqual(array.decode(), [1, 2, 3, 4]);
+      const array = new Struct({ arr: new ArrayT(uint8, 4) });
+      assert.deepEqual(array.fromBuffer(new Uint8Array([1, 2, 3, 4, 5])), { arr: [1, 2, 3, 4] });
     });
 
     // it('should decode fixed amount of bytes', function () {
@@ -83,11 +82,8 @@ describe('Array', function () {
 
   describe('encode', function () {
     it('should encode using array length', function () {
-      const array = new ArrayT(uint8, 10);
-      const buffer = new Uint8Array(array.size);
-      globalThis.encode_stream = new EncodeStream(buffer);
-      array.encode([1, 2, 3, 4]);
-      assert.deepEqual(buffer, new Uint8Array([1, 2, 3, 4, 0, 0, 0, 0, 0, 0]));
+      const array = new Struct({ arr: new ArrayT(uint8, 10) });
+      assert.deepEqual(array.toBuffer({ arr: [1, 2, 3, 4] }), new Uint8Array([1, 2, 3, 4, 0, 0, 0, 0, 0, 0]));
     });
 
     // it('should encode length as number before array', function () {
