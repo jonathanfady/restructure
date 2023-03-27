@@ -29,7 +29,7 @@ describe('Bitfield', function () {
     it('should decode', function () {
       assert.deepEqual(
         bitfield1.fromBuffer(new Uint8Array([JACK | MACK | PACK | NACK | QUACK])),
-        { bitfield1: { Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true } }
+        { Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true }
       );
     });
 
@@ -49,10 +49,8 @@ describe('Bitfield', function () {
       assert.deepEqual(
         bitfield2.fromBuffer(new Uint8Array([JACK | MACK | NACK | PACK | QUACK, RACK | SACK | UACK | VACK | XACK])),
         {
-          bitfield2: {
-            Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true,
-            Rack: true, Sack: true, Tack: false, Uack: true, Vack: true, Wack: false, Xack: true, Yack: false
-          }
+          Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true,
+          Rack: true, Sack: true, Tack: false, Uack: true, Vack: true, Wack: false, Xack: true, Yack: false
         }
       );
     });
@@ -77,11 +75,9 @@ describe('Bitfield', function () {
       assert.deepEqual(
         bitfield3.fromBuffer(new Uint16Array([JACK | MACK | NACK | PACK | QUACK | (UACK << 8), ZACK])),
         {
-          bitfield3: {
-            Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true,
-            Rack: false, Sack: false, Tack: false, Uack: true, Vack: false, Wack: false, Xack: false, Yack: false,
-            Zack: true
-          }
+          Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true,
+          Rack: false, Sack: false, Tack: false, Uack: true, Vack: false, Wack: false, Xack: false, Yack: false,
+          Zack: true
         }
       );
     });

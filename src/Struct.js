@@ -33,6 +33,7 @@ export class Struct {
 
   constructor(fields = {}) {
     this.fields = fields;
+    this.res = {};
 
     this.size = Object.values(fields).reduce((prev, curr) => {
       if (curr instanceof ArrayT) {
@@ -51,7 +52,6 @@ export class Struct {
     this.view = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
     this.pos_1 = 0;
     this.pos_2 = 0;
-    this.res = {};
   }
 
   fromBuffer(buffer) {
@@ -60,7 +60,15 @@ export class Struct {
     this.pos_1 = 0;
 
     Object.entries(this.fields).forEach(([k, v]) => {
-      this.res[k] = this.decode(v);
+      if (v instanceof ArrayT) {
+        this.res[k] = this.readArray(v.type, v.length)
+      } else if (v instanceof Bitfield) {
+        this.readBitfield(v.type, v.flags)
+      } else if (v instanceof StringT) {
+        this.res[k] = this.readString(v.length, v.encoding)
+      } else {
+        this.res[k] = this[`read${v}`]()
+      }
     })
 
     return this.res;
@@ -71,35 +79,43 @@ export class Struct {
     this.pos_2 = 0;
 
     Object.entries(this.fields).forEach(([k, v]) => {
-      this.encode(v, value[k]);
+      if (v instanceof ArrayT) {
+        this.writeArray(v.type, value[k])
+      } else if (v instanceof Bitfield) {
+        this.writeBitfield(v.type, v.flags, value[k])
+      } else if (v instanceof StringT) {
+        this.writeString(value[k], v.encoding)
+      } else {
+        this[`write${v}`](value[k])
+      }
     })
 
     return this.buffer;
   }
 
-  decode(type) {
-    if (type instanceof ArrayT) {
-      return this.readArray(type.type, type.length)
-    } else if (type instanceof Bitfield) {
-      return this.readBitfield(type.type, type.flags)
-    } else if (type instanceof StringT) {
-      return this.readString(type.length, type.encoding)
-    } else {
-      return this[`read${type}`]()
-    }
-  }
+  // decode(type, key) {
+  //   if (type instanceof ArrayT) {
+  //     return this.readArray(type.type, type.length)
+  //   } else if (type instanceof Bitfield) {
+  //     return this.readBitfield(type.type, type.flags, key)
+  //   } else if (type instanceof StringT) {
+  //     return this.readString(type.length, type.encoding)
+  //   } else {
+  //     return this[`read${type}`]()
+  //   }
+  // }
 
-  encode(type, value) {
-    if (type instanceof ArrayT) {
-      this.writeArray(type.type, value)
-    } else if (type instanceof Bitfield) {
-      this.writeBitfield(type.type, type.flags, value)
-    } else if (type instanceof StringT) {
-      this.writeString(value, type.encoding)
-    } else {
-      this[`write${type}`](value)
-    }
-  }
+  // encode(type, value) {
+  //   if (type instanceof ArrayT) {
+  //     this.writeArray(type.type, value)
+  //   } else if (type instanceof Bitfield) {
+  //     this.writeBitfield(type.type, type.flags, value)
+  //   } else if (type instanceof StringT) {
+  //     this.writeString(value, type.encoding)
+  //   } else {
+  //     this[`write${type}`](value)
+  //   }
+  // }
 
   // DecodeStream
   readArray(type, length) {
@@ -113,24 +129,22 @@ export class Struct {
 
       let flag_i = 0;
 
-      return value.reduce((prev, curr) => {
+      value.forEach((value) => {
         for (let i = 0; i < bitlength; i++) {
           if (flags[flag_i] != null) {
-            prev[flags[flag_i]] = !!(curr & (1 << i))
+            this.res[flags[flag_i]] = !!(value & (1 << i))
           }
           flag_i++;
         }
-        return prev
-      }, {})
+      })
     } else {
       const value = this[`read${type}`]();
 
-      return flags.reduce((prev, curr, i) => {
-        if (curr != null) {
-          prev[curr] = !!(value & (1 << i));
+      flags.forEach((flag, i) => {
+        if (flag != null) {
+          this.res[flag] = !!(value & (1 << i));
         }
-        return prev;
-      }, {})
+      })
     }
   }
 

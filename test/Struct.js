@@ -71,7 +71,7 @@ describe('Struct', function () {
       assert.deepEqual(struct.fromBuffer(Buffer.from([21, 0x52, 0x22, 0x85, 0x77, 0x05, 0x12, 0x88, 0x63])), {
         age: 21,
         height: 0x2252,
-        flags: { "one": true, "two": false, "three": false, "four": true, "five": true, "six": false },
+        "one": true, "two": false, "three": false, "four": true, "five": true, "six": false,
         length: 0x63881205
       });
     });
