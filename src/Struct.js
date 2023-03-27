@@ -55,11 +55,11 @@ export class Struct {
 
     Object.entries(this.fields).forEach(([k, v]) => {
       if (v instanceof ArrayT) {
-        this.res[k] = this.readArray(v.type, v.length);
+        this.readArray(v.type, v.length, k);
       } else if (v instanceof Bitfield) {
         this.readBitfield(v.type, v.flags);
       } else if (v instanceof StringT) {
-        this.res[k] = this.readString(v.size);
+        this.readString(v.size, k);
       } else {
         this.res[k] = this[`read${v}`]();
       }
@@ -87,38 +87,14 @@ export class Struct {
     return this.buffer;
   }
 
-  // decode(type, key) {
-  //   if (type instanceof ArrayT) {
-  //     return this.readArray(type.type, type.length)
-  //   } else if (type instanceof Bitfield) {
-  //     return this.readBitfield(type.type, type.flags, key)
-  //   } else if (type instanceof StringT) {
-  //     return this.readString(type.length, type.encoding)
-  //   } else {
-  //     return this[`read${type}`]()
-  //   }
-  // }
-
-  // encode(type, value) {
-  //   if (type instanceof ArrayT) {
-  //     this.writeArray(type.type, value)
-  //   } else if (type instanceof Bitfield) {
-  //     this.writeBitfield(type.type, type.flags, value)
-  //   } else if (type instanceof StringT) {
-  //     this.writeString(value, type.encoding)
-  //   } else {
-  //     this[`write${type}`](value)
-  //   }
-  // }
-
   // DecodeStream
-  readArray(type, length) {
-    return Array.from({ length: length }, () => this[`read${type}`]());
+  readArray(type, length, key) {
+    this.res[key] = Array.from({ length: length }, () => this[`read${type}`]());
   }
 
   readBitfield(type, flags) {
     if (type instanceof ArrayT) {
-      const value = this.readArray(type.type, type.length);
+      const value = Array.from({ length: type.length }, () => this[`read${type.type}`]());
       const bitlength = Struct[`size${type.type}`] * 8;
 
       let flag_i = 0;
@@ -130,7 +106,7 @@ export class Struct {
           }
           flag_i++;
         }
-      })
+      });
     } else {
       const value = this[`read${type}`]();
 
@@ -138,26 +114,14 @@ export class Struct {
         if (flag != null) {
           this.res[flag] = !!(value & (1 << i));
         }
-      })
+      });
     }
   }
 
-  readString(length) {
-    const buf = this.view.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length);
+  readString(length, key) {
+    this.res[key] = textDecoder.decode(this.view.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length));
     this.pos_1 += length;
-
-    try {
-      return textDecoder.decode(buf);
-    } catch (err) {
-      return buf;
-    }
   }
-
-  // readBuffer(length) {
-  //   const buf = this.view.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length);
-  //   this.pos_1 += length;
-  //   return buf;
-  // }
 
   readUInt8() {
     const ret = this.view.getUint8(this.pos_1);
@@ -415,24 +379,3 @@ export class Struct {
     this.pos_2 += 8;
   }
 }
-
-// function stringToUtf16(string, swap) {
-//   let buf = new Uint16Array(string.length);
-//   for (let i = 0; i < string.length; i++) {
-//     let code = string.charCodeAt(i);
-//     if (swap) {
-//       code = (code >> 8) | ((code & 0xff) << 8);
-//     }
-//     buf[i] = code;
-//   }
-//   return new Uint8Array(buf.buffer);
-// }
-
-// function stringToAscii(string) {
-//   let buf = new Uint8Array(string.length);
-//   for (let i = 0; i < string.length; i++) {
-//     // Match node.js behavior - encoding allows 8-bit rather than 7-bit.
-//     buf[i] = string.charCodeAt(i);
-//   }
-//   return buf;
-// }
