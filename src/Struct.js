@@ -43,14 +43,15 @@ export class Struct {
 
     this.buffer = new Uint8Array(this.size);
     this.byteOffset = this.buffer.byteOffset;
-    this.view = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
+    this.view_1 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
+    this.view_2 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
     this.pos_1 = 0;
     this.pos_2 = 0;
   }
 
   fromBuffer(buffer) {
     this.byteOffset = buffer.byteOffset;
-    this.view = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+    this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     this.pos_1 = 0;
 
     Object.entries(this.fields).forEach(([k, v]) => {
@@ -69,7 +70,6 @@ export class Struct {
   }
 
   toBuffer(value) {
-    this.view = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
     this.pos_2 = 0;
 
     Object.entries(this.fields).forEach(([k, v]) => {
@@ -119,38 +119,38 @@ export class Struct {
   }
 
   readString(length, key) {
-    this.res[key] = textDecoder.decode(this.view.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length));
+    this.res[key] = textDecoder.decode(this.view_1.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length));
     this.pos_1 += length;
   }
 
   readUInt8() {
-    const ret = this.view.getUint8(this.pos_1);
+    const ret = this.view_1.getUint8(this.pos_1);
     this.pos_1 += 1;
     return ret;
   }
   readInt8() {
-    const ret = this.view.getInt8(this.pos_1);
+    const ret = this.view_1.getInt8(this.pos_1);
     this.pos_1 += 1;
     return ret;
   }
 
   readUInt16BE() {
-    const ret = this.view.getUint16(this.pos_1);
+    const ret = this.view_1.getUint16(this.pos_1);
     this.pos_1 += 2;
     return ret;
   }
   readUInt16LE() {
-    const ret = this.view.getUint16(this.pos_1, true);
+    const ret = this.view_1.getUint16(this.pos_1, true);
     this.pos_1 += 2;
     return ret;
   }
   readInt16BE() {
-    const ret = this.view.getInt16(this.pos_1);
+    const ret = this.view_1.getInt16(this.pos_1);
     this.pos_1 += 2;
     return ret;
   }
   readInt16LE() {
-    const ret = this.view.getInt16(this.pos_1, true);
+    const ret = this.view_1.getInt16(this.pos_1, true);
     this.pos_1 += 2;
     return ret;
   }
@@ -172,44 +172,44 @@ export class Struct {
   }
 
   readUInt32BE() {
-    const ret = this.view.getUint32(this.pos_1);
+    const ret = this.view_1.getUint32(this.pos_1);
     this.pos_1 += 4;
     return ret;
   }
   readUInt32LE() {
-    const ret = this.view.getUint32(this.pos_1, true);
+    const ret = this.view_1.getUint32(this.pos_1, true);
     this.pos_1 += 4;
     return ret;
   }
   readInt32BE() {
-    const ret = this.view.getInt32(this.pos_1);
+    const ret = this.view_1.getInt32(this.pos_1);
     this.pos_1 += 4;
     return ret;
   }
   readInt32LE() {
-    const ret = this.view.getInt32(this.pos_1, true);
+    const ret = this.view_1.getInt32(this.pos_1, true);
     this.pos_1 += 4;
     return ret;
   }
 
   readFloatBE() {
-    const ret = this.view.getFloat32(this.pos_1);
+    const ret = this.view_1.getFloat32(this.pos_1);
     this.pos_1 += 4;
     return ret;
   }
   readFloatLE() {
-    const ret = this.view.getFloat32(this.pos_1, true);
+    const ret = this.view_1.getFloat32(this.pos_1, true);
     this.pos_1 += 4;
     return ret;
   }
 
   readDoubleBE() {
-    const ret = this.view.getFloat64(this.pos_1);
+    const ret = this.view_1.getFloat64(this.pos_1);
     this.pos_1 += 8;
     return ret;
   }
   readDoubleLE() {
-    const ret = this.view.getFloat64(this.pos_1, true);
+    const ret = this.view_1.getFloat64(this.pos_1, true);
     this.pos_1 += 8;
     return ret;
   }
@@ -291,28 +291,28 @@ export class Struct {
   }
 
   writeUInt8(value) {
-    this.view.setUint8(this.pos_2, value);
+    this.view_2.setUint8(this.pos_2, value);
     this.pos_2 += 1;
   }
   writeInt8(value) {
-    this.view.setInt8(this.pos_2, value);
+    this.view_2.setInt8(this.pos_2, value);
     this.pos_2 += 1;
   }
 
   writeUInt16BE(value) {
-    this.view.setUint16(this.pos_2, value);
+    this.view_2.setUint16(this.pos_2, value);
     this.pos_2 += 2;
   }
   writeUInt16LE(value) {
-    this.view.setUint16(this.pos_2, value, true);
+    this.view_2.setUint16(this.pos_2, value, true);
     this.pos_2 += 2;
   }
   writeInt16BE(value) {
-    this.view.setInt16(this.pos_2, value);
+    this.view_2.setInt16(this.pos_2, value);
     this.pos_2 += 2;
   }
   writeInt16LE(value) {
-    this.view.setInt16(this.pos_2, value, true);
+    this.view_2.setInt16(this.pos_2, value, true);
     this.pos_2 += 2;
   }
 
@@ -345,37 +345,37 @@ export class Struct {
   }
 
   writeUInt32BE(value) {
-    this.view.setUint32(this.pos_2, value);
+    this.view_2.setUint32(this.pos_2, value);
     this.pos_2 += 4;
   }
   writeUInt32LE(value) {
-    this.view.setUint32(this.pos_2, value, true);
+    this.view_2.setUint32(this.pos_2, value, true);
     this.pos_2 += 4;
   }
   writeInt32BE(value) {
-    this.view.setInt32(this.pos_2, value);
+    this.view_2.setInt32(this.pos_2, value);
     this.pos_2 += 4;
   }
   writeInt32LE(value) {
-    this.view.setInt32(this.pos_2, value, true);
+    this.view_2.setInt32(this.pos_2, value, true);
     this.pos_2 += 4;
   }
 
   writeFloatBE(value) {
-    this.view.setFloat32(this.pos_2, value);
+    this.view_2.setFloat32(this.pos_2, value);
     this.pos_2 += 4;
   }
   writeFloatLE(value) {
-    this.view.setFloat32(this.pos_2, value, true);
+    this.view_2.setFloat32(this.pos_2, value, true);
     this.pos_2 += 4;
   }
 
   writeDoubleBE(value) {
-    this.view.setFloat64(this.pos_2, value);
+    this.view_2.setFloat64(this.pos_2, value);
     this.pos_2 += 8;
   }
   writeDoubleLE(value) {
-    this.view.setFloat64(this.pos_2, value, true);
+    this.view_2.setFloat64(this.pos_2, value, true);
     this.pos_2 += 8;
   }
 }
