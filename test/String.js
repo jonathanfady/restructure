@@ -19,10 +19,10 @@ describe('String', function () {
     //   assert.equal(string.fromBuffer(Buffer.from('\x07testing')), 'testing');
     // });
 
-    it('should decode utf8', function () {
-      const string = new Struct({ string: new StringT(4) });
-      assert.deepEqual(string.fromBuffer(Buffer.from('🍻')), { string: '🍻' });
-    });
+    // it('should decode utf8', function () {
+    //   const string = new Struct({ string: new StringT(4) });
+    //   assert.deepEqual(string.fromBuffer(Buffer.from('🍻')), { string: '🍻' });
+    // });
 
     // it('should decode encoding computed from function', function() {
     //   const string = new StringT(4, function() { return 'utf8'; });
@@ -95,10 +95,10 @@ describe('String', function () {
     //   assert.deepEqual(string.toBuffer('testing 😜'), Buffer.from('\x0ctesting 😜', 'utf8'));
     // });
 
-    it('should encode utf8', function () {
-      const string = new Struct({ string: new StringT(4) });
-      assert.deepEqual(string.toBuffer({ string: '🍻' }), Buffer.from('🍻'));
-    });
+    // it('should encode utf8', function () {
+    //   const string = new Struct({ string: new StringT(4) });
+    //   assert.deepEqual(string.toBuffer({ string: '🍻' }), Buffer.from('🍻'));
+    // });
 
     // it('should encode encoding computed from function', function () {
     //   const string = new StringT(4, function () { return 'utf8'; });

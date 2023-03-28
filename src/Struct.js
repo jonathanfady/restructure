@@ -1,8 +1,5 @@
 import { Array as ArrayT } from './Array.js';
 
-const textDecoder = new TextDecoder();
-const textEncoder = new TextEncoder();
-
 export class Struct {
   static sizeUInt8 = 1;
   static sizeInt8 = 1;
@@ -54,31 +51,48 @@ export class Struct {
 
     for (const [k, v] of Object.entries(this.fields)) {
       if (typeof v == 'string') { //Number
+        // console.time('Number')
         this.res[k] = this[`read${v}`]();
+        // console.timeEnd('Number')
       } else if ("length" in v) { //Array
+        // console.time('Array')
         this.readArray(v.type, v.length, k);
+        // console.timeEnd('Array')
       } else if ("flags" in v) { //Bitfield
+        // console.time('Bitfield')
         this.readBitfield(v.type, v.flags);
+        // console.timeEnd('Bitfield')
       } else { //String
+        // console.time('String')
         this.readString(v.size, k);
+        // console.timeEnd('String')
       }
     }
 
     return this.res;
   }
 
-  toBuffer(value) {
+  toBuffer(values) {
     this.pos_2 = 0;
 
     for (const [k, v] of Object.entries(this.fields)) {
+      const value = values[k];
       if (typeof v == 'string') { //Number
-        this[`write${v}`](value[k]);
+        // console.time('Number')
+        this[`write${v}`](value);
+        // console.timeEnd('Number')
       } else if ("length" in v) { //Array
-        this.writeArray(v.type, value[k]);
+        // console.time('Array')
+        this.writeArray(v.type, value);
+        // console.timeEnd('Array')
       } else if ("flags" in v) { //Bitfield
-        this.writeBitfield(v.type, v.flags, value);
+        // console.time('Bitfield')
+        this.writeBitfield(v.type, v.flags, values);
+        // console.timeEnd('Bitfield')
       } else { //String
-        this.writeString(value[k]);
+        // console.time('String')
+        this.writeString(value);
+        // console.timeEnd('String')
       }
     }
 
@@ -87,7 +101,11 @@ export class Struct {
 
   // DecodeStream
   readArray(type, length, key) {
-    this.res[key] = Array.from({ length: length }, () => this[`read${type}`]());
+    const arr = new Array(length);
+    for (let i = 0; i < length; i++) {
+      arr[i] = this[`read${type}`]();
+    }
+    this.res[key] = arr;
   }
 
   readBitfield(type, flags) {
@@ -102,8 +120,9 @@ export class Struct {
       for (let i = 0; i < values.length; i++) {
         const value = values[i];
         for (let j = 0; j < 8; j++) {
-          if (flags[flag_i] != null) {
-            this.res[flags[flag_i]] = !!(value & (1 << j));
+          const flag = flags[flag_i];
+          if (flag != null) {
+            this.res[flag] = !!(value & (1 << j));
           }
           flag_i++;
         }
@@ -121,8 +140,11 @@ export class Struct {
   }
 
   readString(length, key) {
-    this.res[key] = textDecoder.decode(this.view_1.buffer.slice(this.byteOffset + this.pos_1, this.byteOffset + this.pos_1 + length));
-    this.pos_1 += length;
+    let str = '';
+    for (let i = 0; i < length; ++i) {
+      str += String.fromCharCode(this.view_1.getUint8(this.pos_1++));
+    }
+    this.res[key] = str;
   }
 
   readUInt8() {
@@ -218,7 +240,8 @@ export class Struct {
 
   // EncodeStream
   writeArray(type, array) {
-    for (const value of array) {
+    for (let i = 0; i < array.length; i++) {
+      const value = array[i];
       this[`write${type}`](value);
     }
   }
@@ -253,42 +276,10 @@ export class Struct {
   }
 
   writeString(string) {
-    // let buf;
-    // switch (encoding) {
-    //   case 'ascii':
-    //     buf = stringToAscii(string);
-    //     break;
-
-    //   case 'utf16le':
-    //   case 'utf16-le':
-    //   case 'ucs2': // node treats this the same as utf16.
-    //     buf = stringToUtf16(string, isBigEndian);
-    //     break;
-
-    //   case 'utf16be':
-    //   case 'utf16-be':
-    //     buf = stringToUtf16(string, !isBigEndian);
-    //     break;
-
-    //   case 'utf8':
-    //     buf = textEncoder.encode(string);
-    //     break;
-
-    //   default:
-    //     throw new Error(`Unsupported encoding: ${encoding}`);
-    // }
-
-    // this.writeBuffer(textEncoder.encode(string));
-
-    for (const value of textEncoder.encode(string)) {
-      this.writeUInt8(value);
+    for (let i = 0; i < string.length; ++i) {
+      this.buffer[this.pos_2++] = string.charCodeAt(i);
     }
   }
-
-  // writeBuffer(buffer) {
-  //   this.buffer.set(buffer, this.pos_2);
-  //   this.pos_2 += buffer.length;
-  // }
 
   writeUInt8(value) {
     this.buffer[this.pos_2++] = value;
