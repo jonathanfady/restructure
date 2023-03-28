@@ -1,13 +1,12 @@
-import { Array as ArrayT } from './Array.js';
 import { Struct } from './Struct.js';
 
 export class Bitfield {
   constructor(type, flags = []) {
     this.type = type;
     this.flags = flags;
-    if (type instanceof ArrayT)
-      this.size = type.size;
-    else
+    if (typeof type == 'string') // Number
       this.size = Struct[`size${type}`];
+    else // Array
+      this.size = type.size;
   }
 }

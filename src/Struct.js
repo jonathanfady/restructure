@@ -1,6 +1,4 @@
 import { Array as ArrayT } from './Array.js';
-import { Bitfield } from './Bitfield.js';
-import { String as StringT } from './String.js';
 
 const textDecoder = new TextDecoder();
 const textEncoder = new TextEncoder();
@@ -30,14 +28,14 @@ export class Struct {
     this.res = {};
 
     this.size = Object.values(fields).reduce((prev, curr) => {
-      if (curr instanceof ArrayT) {
-        return prev += curr.size;
-      } else if (curr instanceof Bitfield) {
-        return prev += curr.size;
-      } else if (curr instanceof StringT) {
-        return prev += curr.size;
-      } else {
+      if (typeof curr == 'string') { //Number
         return prev += Struct[`size${curr}`];
+      } else if ("length" in curr) { //Array
+        return prev += curr.size;
+      } else if ("flags" in curr) { //Bitfield
+        return prev += curr.size;
+      } else { //String
+        return prev += curr.size;
       }
     }, 0)
 
@@ -54,17 +52,17 @@ export class Struct {
     this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     this.pos_1 = 0;
 
-    Object.entries(this.fields).forEach(([k, v]) => {
-      if (v instanceof ArrayT) {
-        this.readArray(v.type, v.length, k);
-      } else if (v instanceof Bitfield) {
-        this.readBitfield(v.type, v.flags);
-      } else if (v instanceof StringT) {
-        this.readString(v.size, k);
-      } else {
+    for (const [k, v] of Object.entries(this.fields)) {
+      if (typeof v == 'string') { //Number
         this.res[k] = this[`read${v}`]();
+      } else if ("length" in v) { //Array
+        this.readArray(v.type, v.length, k);
+      } else if ("flags" in v) { //Bitfield
+        this.readBitfield(v.type, v.flags);
+      } else { //String
+        this.readString(v.size, k);
       }
-    });
+    }
 
     return this.res;
   }
@@ -72,17 +70,17 @@ export class Struct {
   toBuffer(value) {
     this.pos_2 = 0;
 
-    Object.entries(this.fields).forEach(([k, v]) => {
-      if (v instanceof ArrayT) {
-        this.writeArray(v.type, value[k]);
-      } else if (v instanceof Bitfield) {
-        this.writeBitfield(v.type, v.flags, value);
-      } else if (v instanceof StringT) {
-        this.writeString(value[k]);
-      } else {
+    for (const [k, v] of Object.entries(this.fields)) {
+      if (typeof v == 'string') { //Number
         this[`write${v}`](value[k]);
+      } else if ("length" in v) { //Array
+        this.writeArray(v.type, value[k]);
+      } else if ("flags" in v) { //Bitfield
+        this.writeBitfield(v.type, v.flags, value);
+      } else { //String
+        this.writeString(value[k]);
       }
-    });
+    }
 
     return this.buffer;
   }
@@ -94,27 +92,31 @@ export class Struct {
 
   readBitfield(type, flags) {
     if (type instanceof ArrayT) {
-      const value = Array.from({ length: type.length }, () => this[`read${type.type}`]());
-      const bitlength = Struct[`size${type.type}`] * 8;
+      const values = new Uint8Array(type.size);
+      for (let i = 0; i < type.size; i++) {
+        values[i] = this.readUInt8();
+      }
 
       let flag_i = 0;
 
-      value.forEach((value) => {
-        for (let i = 0; i < bitlength; i++) {
+      for (let i = 0; i < values.length; i++) {
+        const value = values[i];
+        for (let j = 0; j < 8; j++) {
           if (flags[flag_i] != null) {
-            this.res[flags[flag_i]] = !!(value & (1 << i));
+            this.res[flags[flag_i]] = !!(value & (1 << j));
           }
           flag_i++;
         }
-      });
+      }
     } else {
       const value = this[`read${type}`]();
 
-      flags.forEach((flag, i) => {
+      for (let i = 0; i < flags.length; i++) {
+        const flag = flags[i];
         if (flag != null) {
           this.res[flag] = !!(value & (1 << i));
         }
-      });
+      }
     }
   }
 
@@ -216,41 +218,35 @@ export class Struct {
 
   // EncodeStream
   writeArray(type, array) {
-    array.forEach((v) => {
-      this[`write${type}`](v);
-    })
+    for (const value of array) {
+      this[`write${type}`](value);
+    }
   }
+
 
   writeBitfield(type, flags, keys) {
     if (type instanceof ArrayT) {
-      const values = [];
-      const bitlength = Struct[`size${type.type}`] * 8;
-      let value = 0;
+      let flag_i = 0;
 
-      flags.forEach((flag, i) => {
-        const j = i % bitlength;
-        if (flag != null) {
-          if (keys[flag]) { value |= (1 << j); }
+      for (let i = 0; i < type.size; i++) {
+        let value = 0;
+        for (let j = 0; j < 8; j++) {
+          const flag = flags[flag_i];
+          if ((flag != null) && (keys[flag])) {
+            value |= (1 << j);
+          }
+          flag_i++;
         }
-        if (j == (bitlength - 1)) {
-          values.push(value);
-          value = 0;
-        }
-      });
-
-      if ((flags.length % bitlength) != 0) {
-        values.push(value);
+        this.writeUInt8(value);
       }
-
-      this.writeArray(type.type, values);
     } else {
       let value = 0;
-
-      flags.forEach((flag, i) => {
-        if (flag != null) {
-          if (keys[flag]) { value |= (1 << i); }
+      for (let i = 0; i < flags.length; i++) {
+        const flag = flags[i];
+        if ((flag != null) && (keys[flag])) {
+          value |= (1 << i);
         }
-      });
+      }
 
       this[`write${type}`](value);
     }
@@ -282,17 +278,20 @@ export class Struct {
     //     throw new Error(`Unsupported encoding: ${encoding}`);
     // }
 
-    this.writeBuffer(textEncoder.encode(string));
+    // this.writeBuffer(textEncoder.encode(string));
+
+    for (const value of textEncoder.encode(string)) {
+      this.writeUInt8(value);
+    }
   }
 
-  writeBuffer(buffer) {
-    this.buffer.set(buffer, this.pos_2);
-    this.pos_2 += buffer.length;
-  }
+  // writeBuffer(buffer) {
+  //   this.buffer.set(buffer, this.pos_2);
+  //   this.pos_2 += buffer.length;
+  // }
 
   writeUInt8(value) {
-    this.view_2.setUint8(this.pos_2, value);
-    this.pos_2 += 1;
+    this.buffer[this.pos_2++] = value;
   }
   writeInt8(value) {
     this.view_2.setInt8(this.pos_2, value);
