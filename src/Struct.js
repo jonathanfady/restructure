@@ -75,7 +75,6 @@ export class Struct {
     this.#arrays_index = 0;
 
     for (const [k, v] of Object.entries(this.#fields)) {
-      console.time(k);
       if (typeof v == 'string') { // Number
         // console.time('Number')
         this.#results[k] = this[`read${v}`]();
@@ -93,7 +92,6 @@ export class Struct {
         this.#results[k] = this.#readString();
         // console.timeEnd('String')
       }
-      console.timeEnd(k);
     }
 
     return this.#results;
@@ -103,7 +101,6 @@ export class Struct {
     this.#pos_2 = 0;
 
     for (const [k, v] of Object.entries(this.#fields)) {
-      console.time(k);
       if (typeof v == 'string') { // Number
         // console.time('Number')
         this[`write${v}`](values[k]);
@@ -121,7 +118,6 @@ export class Struct {
         this.#writeString(values[k]);
         // console.timeEnd('String')
       }
-      console.timeEnd(k);
     }
 
     return this.#buffer;
