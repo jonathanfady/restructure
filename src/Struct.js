@@ -22,14 +22,21 @@ export class Struct {
     this.fields = fields;
     this.res = {};
 
+    this.arrays = [];
+    this.arrays_index = 0;
+    this.strings = [];
+    this.strings_index = 0;
+
     this.size = Object.values(fields).reduce((prev, curr) => {
       if (typeof curr == 'string') { // Number
         return prev += Struct[`size${curr}`];
       } else if ("length" in curr) { // Array
+        this.arrays.push(new Array(curr.length));
         return prev += curr.size;
       } else if ("flags" in curr) { // Bitfield
         return prev += curr.size;
       } else { // String
+        this.strings.push(new Array(curr.size));
         return prev += curr.size;
       }
     }, 0)
@@ -44,6 +51,8 @@ export class Struct {
   fromBuffer(buffer) {
     this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     this.pos_1 = 0;
+    this.arrays_index = 0;
+    this.strings_index = 0;
 
     for (const [k, v] of Object.entries(this.fields)) {
       if (typeof v == 'string') { // Number
@@ -97,7 +106,7 @@ export class Struct {
 
   // DecodeStream
   readArray(type, length, key) {
-    const arr = new Array(length);
+    const arr = this.arrays[this.arrays_index++];
     for (let i = 0; i < length; ++i) {
       arr[i] = this[`read${type}`]();
     }
@@ -130,7 +139,7 @@ export class Struct {
   }
 
   readString(length, key) {
-    const chars = new Array(length);
+    const chars = this.strings[this.strings_index++];
     for (let i = 0; i < length; ++i) {
       chars[i] = String.fromCharCode(this.view_1.getUint8(this.pos_1++));
     }
