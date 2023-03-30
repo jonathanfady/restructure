@@ -35,7 +35,6 @@ export class Struct {
     }, 0)
 
     this.buffer = new Uint8Array(this.size);
-    this.byteOffset = this.buffer.byteOffset;
     this.view_1 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
     this.view_2 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
     this.pos_1 = 0;
@@ -43,7 +42,6 @@ export class Struct {
   }
 
   fromBuffer(buffer) {
-    this.byteOffset = buffer.byteOffset;
     this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     this.pos_1 = 0;
 
@@ -100,7 +98,7 @@ export class Struct {
   // DecodeStream
   readArray(type, length, key) {
     const arr = new Array(length);
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < length; ++i) {
       arr[i] = this[`read${type}`]();
     }
     this.res[key] = arr;
@@ -110,7 +108,7 @@ export class Struct {
     if (typeof type == 'string') { // Number
       const value = this[`read${type}`]();
 
-      for (let i = 0; i < flags.length; i++) {
+      for (let i = 0; i < flags.length; ++i) {
         const flag = flags[i];
         if (flag != null) {
           this.res[flag] = !!(value & (1 << i));
@@ -118,9 +116,9 @@ export class Struct {
       }
     } else { // Array
       let flag_i = 0;
-      for (let i = 0; i < type.size; i++) {
+      for (let i = 0; i < type.size; ++i) {
         const value = this.readUInt8();
-        for (let j = 0; j < 8; j++) {
+        for (let j = 0; j < 8; ++j) {
           const flag = flags[flag_i];
           if (flag != null) {
             this.res[flag] = !!(value & (1 << j));
@@ -132,11 +130,11 @@ export class Struct {
   }
 
   readString(length, key) {
-    let str = '';
+    const chars = new Array(length);
     for (let i = 0; i < length; ++i) {
-      str += String.fromCharCode(this.view_1.getUint8(this.pos_1++));
+      chars[i] = String.fromCharCode(this.view_1.getUint8(this.pos_1++));
     }
-    this.res[key] = str;
+    this.res[key] = chars.join('');
   }
 
   readUInt8() {
@@ -232,7 +230,7 @@ export class Struct {
 
   // EncodeStream
   writeArray(type, array) {
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; ++i) {
       const value = array[i];
       this[`write${type}`](value);
     }
@@ -242,7 +240,7 @@ export class Struct {
   writeBitfield(type, flags, keys) {
     if (typeof type == 'string') { // Number
       let value = 0;
-      for (let i = 0; i < flags.length; i++) {
+      for (let i = 0; i < flags.length; ++i) {
         const flag = flags[i];
         if ((flag != null) && (keys[flag])) {
           value |= (1 << i);
@@ -252,9 +250,9 @@ export class Struct {
       this[`write${type}`](value);
     } else { // Array
       let flag_i = 0;
-      for (let i = 0; i < type.size; i++) {
+      for (let i = 0; i < type.size; ++i) {
         let value = 0;
-        for (let j = 0; j < 8; j++) {
+        for (let j = 0; j < 8; ++j) {
           const flag = flags[flag_i];
           if ((flag != null) && (keys[flag])) {
             value |= (1 << j);
