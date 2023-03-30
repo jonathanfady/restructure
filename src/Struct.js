@@ -19,127 +19,105 @@ export class Struct {
   static sizeDoubleBE = 8;
   static sizeDoubleLE = 8;
 
-  /** private properties */
-  #fields;
-  #results;
-  #arrays;
-  #arrays_index;
-  #size;
-  #buffer;
-  #view_1;
-  #view_2;
-  #pos_1;
-  #pos_2;
-
   constructor(fields) {
-    this.#fields = fields;
-    this.#results = {};
+    this.fields = fields;
+    this.results = {};
 
-    this.#arrays = [];
-    this.#arrays_index = 0;
+    this.arrays = [];
+    this.arrays_index = 0;
 
-    this.#size = Object.values(fields).reduce((prev, curr) => {
+    this.size = Object.values(fields).reduce((prev, curr) => {
       if (typeof curr == 'string') { // Number
         return prev += Struct[`size${curr}`];
       } else if ("length" in curr) { // Array
-        this.#arrays.push(new Array(curr.length));
+        this.arrays.push(new Array(curr.length));
         return prev += curr.size;
       } else if ("flags" in curr) { // Bitfield
         return prev += curr.size;
       } else { // String
-        this.#arrays.push(new Array(curr.size));
+        this.arrays.push(new Array(curr.size));
         return prev += curr.size;
       }
     }, 0)
 
-    this.#buffer = new Uint8Array(this.#size);
-    this.#view_1 = new DataView(this.#buffer.buffer, this.#buffer.byteOffset, this.#buffer.byteLength);
-    this.#view_2 = new DataView(this.#buffer.buffer, this.#buffer.byteOffset, this.#buffer.byteLength);
-    this.#pos_1 = 0;
-    this.#pos_2 = 0;
-  }
-
-  get size() {
-    return this.#size;
-  }
-  get results() {
-    return this.#results;
-  }
-  get buffer() {
-    return this.#buffer;
+    this.buffer = new Uint8Array(this.size);
+    this.view_1 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
+    this.view_2 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
+    this.pos_1 = 0;
+    this.pos_2 = 0;
   }
 
   fromBuffer(buffer) {
-    this.#view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-    this.#pos_1 = 0;
-    this.#arrays_index = 0;
+    this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+    this.pos_1 = 0;
+    this.arrays_index = 0;
 
-    for (const [k, v] of Object.entries(this.#fields)) {
+    for (const [k, v] of Object.entries(this.fields)) {
       if (typeof v == 'string') { // Number
         // console.time('Number')
-        this.#results[k] = this[`read${v}`]();
+        this.results[k] = this[`read${v}`]();
         // console.timeEnd('Number')
       } else if ("length" in v) { // Array
         // console.time('Array')
-        this.#results[k] = this.#readArray(v.type);
+        this.results[k] = this.readArray(v.type);
         // console.timeEnd('Array')
       } else if ("flags" in v) { // Bitfield
         // console.time('Bitfield')
-        this.#readBitfield(v.type, v.flags);
+        this.readBitfield(v.type, v.flags);
         // console.timeEnd('Bitfield')
       } else { // String
         // console.time('String')
-        this.#results[k] = this.#readString();
+        this.results[k] = this.readString();
         // console.timeEnd('String')
       }
     }
 
-    return this.#results;
+    return this.results;
   }
 
   toBuffer(values) {
-    this.#pos_2 = 0;
+    this.pos_2 = 0;
 
-    for (const [k, v] of Object.entries(this.#fields)) {
+    for (const [k, v] of Object.entries(this.fields)) {
       if (typeof v == 'string') { // Number
         // console.time('Number')
         this[`write${v}`](values[k]);
         // console.timeEnd('Number')
       } else if ("length" in v) { // Array
         // console.time('Array')
-        this.#writeArray(v.type, values[k]);
+        this.writeArray(v.type, values[k]);
         // console.timeEnd('Array')
       } else if ("flags" in v) { // Bitfield
         // console.time('Bitfield')
-        this.#writeBitfield(v.type, v.flags, values);
+        this.writeBitfield(v.type, v.flags, values);
         // console.timeEnd('Bitfield')
       } else { // String
         // console.time('String')
-        this.#writeString(values[k]);
+        this.writeString(values[k]);
         // console.timeEnd('String')
       }
     }
 
-    return this.#buffer;
+    return this.buffer;
   }
 
   // DecodeStream
-  #readArray(type) {
-    const arr = this.#arrays[this.#arrays_index++];
+  readArray(type) {
+    const arr = this.arrays[this.arrays_index++];
     for (let i = 0; i < arr.length; ++i) {
       arr[i] = this[`read${type}`]();
     }
     return arr;
   }
 
-  #readBitfield(type, flags) {
+  readBitfield(type, flags) {
     if (typeof type == 'string') { // Number
       const value = this[`read${type}`]();
 
       for (let i = 0; i < flags.length; ++i) {
         const flag = flags[i];
         if (flag != null) {
-          this.#results[flag] = !!(value & (1 << i));
+          this.results[flag] = !!(value & (1 << i));
         }
       }
     } else { // Array
@@ -149,7 +127,7 @@ export class Struct {
         for (let j = 0; j < 8; ++j) {
           const flag = flags[flag_i];
           if (flag != null) {
-            this.#results[flag] = !!(value & (1 << j));
+            this.results[flag] = !!(value & (1 << j));
           }
           flag_i++;
         }
@@ -157,32 +135,32 @@ export class Struct {
     }
   }
 
-  #readString() {
-    const chars = this.#arrays[this.#arrays_index++];
+  readString() {
+    const chars = this.arrays[this.arrays_index++];
     for (let i = 0; i < chars.length; ++i) {
-      chars[i] = String.fromCharCode(this.#view_1.getUint8(this.#pos_1++));
+      chars[i] = String.fromCharCode(this.view_1.getUint8(this.pos_1++));
     }
     return chars.join('');
   }
 
   readUInt8() {
-    return this.#view_1.getUint8(this.#pos_1++);
+    return this.view_1.getUint8(this.pos_1++);
   }
   readInt8() {
-    return this.#view_1.getInt8(this.#pos_1++);
+    return this.view_1.getInt8(this.pos_1++);
   }
 
   readUInt16BE() {
-    return this.#view_1.getUint16((this.#pos_1 += 2) - 2);
+    return this.view_1.getUint16((this.pos_1 += 2) - 2);
   }
   readUInt16LE() {
-    return this.#view_1.getUint16((this.#pos_1 += 2) - 2, true);
+    return this.view_1.getUint16((this.pos_1 += 2) - 2, true);
   }
   readInt16BE() {
-    return this.#view_1.getInt16((this.#pos_1 += 2) - 2);
+    return this.view_1.getInt16((this.pos_1 += 2) - 2);
   }
   readInt16LE() {
-    return this.#view_1.getInt16((this.#pos_1 += 2) - 2, true);
+    return this.view_1.getInt16((this.pos_1 += 2) - 2, true);
   }
 
   readUInt24BE() {
@@ -202,34 +180,34 @@ export class Struct {
   }
 
   readUInt32BE() {
-    return this.#view_1.getUint32((this.#pos_1 += 4) - 4);
+    return this.view_1.getUint32((this.pos_1 += 4) - 4);
   }
   readUInt32LE() {
-    return this.#view_1.getUint32((this.#pos_1 += 4) - 4, true);
+    return this.view_1.getUint32((this.pos_1 += 4) - 4, true);
   }
   readInt32BE() {
-    return this.#view_1.getInt32((this.#pos_1 += 4) - 4);
+    return this.view_1.getInt32((this.pos_1 += 4) - 4);
   }
   readInt32LE() {
-    return this.#view_1.getInt32((this.#pos_1 += 4) - 4, true);
+    return this.view_1.getInt32((this.pos_1 += 4) - 4, true);
   }
 
   readFloatBE() {
-    return this.#view_1.getFloat32((this.#pos_1 += 4) - 4);
+    return this.view_1.getFloat32((this.pos_1 += 4) - 4);
   }
   readFloatLE() {
-    return this.#view_1.getFloat32((this.#pos_1 += 4) - 4, true);
+    return this.view_1.getFloat32((this.pos_1 += 4) - 4, true);
   }
 
   readDoubleBE() {
-    return this.#view_1.getFloat64((this.#pos_1 += 8) - 8);
+    return this.view_1.getFloat64((this.pos_1 += 8) - 8);
   }
   readDoubleLE() {
-    return this.#view_1.getFloat64((this.#pos_1 += 8) - 8, true);
+    return this.view_1.getFloat64((this.pos_1 += 8) - 8, true);
   }
 
   // EncodeStream
-  #writeArray(type, array) {
+  writeArray(type, array) {
     for (let i = 0; i < array.length; ++i) {
       const value = array[i];
       this[`write${type}`](value);
@@ -237,7 +215,7 @@ export class Struct {
   }
 
 
-  #writeBitfield(type, flags, keys) {
+  writeBitfield(type, flags, keys) {
     if (typeof type == 'string') { // Number
       let value = 0;
       for (let i = 0; i < flags.length; ++i) {
@@ -259,52 +237,52 @@ export class Struct {
           }
           flag_i++;
         }
-        this.#buffer[this.#pos_2++] = value;
+        this.buffer[this.pos_2++] = value;
       }
     }
   }
 
-  #writeString(string) {
+  writeString(string) {
     for (let i = 0; i < string.length; ++i) {
-      this.#buffer[this.#pos_2++] = string.charCodeAt(i);
+      this.buffer[this.pos_2++] = string.charCodeAt(i);
     }
   }
 
   writeUInt8(value) {
-    this.#buffer[this.#pos_2++] = value;
+    this.buffer[this.pos_2++] = value;
   }
   writeInt8(value) {
-    this.#view_2.setInt8(this.#pos_2, value);
-    this.#pos_2 += 1;
+    this.view_2.setInt8(this.pos_2, value);
+    this.pos_2 += 1;
   }
 
   writeUInt16BE(value) {
-    this.#view_2.setUint16(this.#pos_2, value);
-    this.#pos_2 += 2;
+    this.view_2.setUint16(this.pos_2, value);
+    this.pos_2 += 2;
   }
   writeUInt16LE(value) {
-    this.#view_2.setUint16(this.#pos_2, value, true);
-    this.#pos_2 += 2;
+    this.view_2.setUint16(this.pos_2, value, true);
+    this.pos_2 += 2;
   }
   writeInt16BE(value) {
-    this.#view_2.setInt16(this.#pos_2, value);
-    this.#pos_2 += 2;
+    this.view_2.setInt16(this.pos_2, value);
+    this.pos_2 += 2;
   }
   writeInt16LE(value) {
-    this.#view_2.setInt16(this.#pos_2, value, true);
-    this.#pos_2 += 2;
+    this.view_2.setInt16(this.pos_2, value, true);
+    this.pos_2 += 2;
   }
 
   writeUInt24BE(value) {
-    this.#buffer[this.#pos_2++] = (value >>> 16) & 0xff;
-    this.#buffer[this.#pos_2++] = (value >>> 8) & 0xff;
-    this.#buffer[this.#pos_2++] = value & 0xff;
+    this.buffer[this.pos_2++] = (value >>> 16) & 0xff;
+    this.buffer[this.pos_2++] = (value >>> 8) & 0xff;
+    this.buffer[this.pos_2++] = value & 0xff;
   }
 
   writeUInt24LE(value) {
-    this.#buffer[this.#pos_2++] = value & 0xff;
-    this.#buffer[this.#pos_2++] = (value >>> 8) & 0xff;
-    this.#buffer[this.#pos_2++] = (value >>> 16) & 0xff;
+    this.buffer[this.pos_2++] = value & 0xff;
+    this.buffer[this.pos_2++] = (value >>> 8) & 0xff;
+    this.buffer[this.pos_2++] = (value >>> 16) & 0xff;
   }
 
   writeInt24BE(value) {
@@ -324,37 +302,37 @@ export class Struct {
   }
 
   writeUInt32BE(value) {
-    this.#view_2.setUint32(this.#pos_2, value);
-    this.#pos_2 += 4;
+    this.view_2.setUint32(this.pos_2, value);
+    this.pos_2 += 4;
   }
   writeUInt32LE(value) {
-    this.#view_2.setUint32(this.#pos_2, value, true);
-    this.#pos_2 += 4;
+    this.view_2.setUint32(this.pos_2, value, true);
+    this.pos_2 += 4;
   }
   writeInt32BE(value) {
-    this.#view_2.setInt32(this.#pos_2, value);
-    this.#pos_2 += 4;
+    this.view_2.setInt32(this.pos_2, value);
+    this.pos_2 += 4;
   }
   writeInt32LE(value) {
-    this.#view_2.setInt32(this.#pos_2, value, true);
-    this.#pos_2 += 4;
+    this.view_2.setInt32(this.pos_2, value, true);
+    this.pos_2 += 4;
   }
 
   writeFloatBE(value) {
-    this.#view_2.setFloat32(this.#pos_2, value);
-    this.#pos_2 += 4;
+    this.view_2.setFloat32(this.pos_2, value);
+    this.pos_2 += 4;
   }
   writeFloatLE(value) {
-    this.#view_2.setFloat32(this.#pos_2, value, true);
-    this.#pos_2 += 4;
+    this.view_2.setFloat32(this.pos_2, value, true);
+    this.pos_2 += 4;
   }
 
   writeDoubleBE(value) {
-    this.#view_2.setFloat64(this.#pos_2, value);
-    this.#pos_2 += 8;
+    this.view_2.setFloat64(this.pos_2, value);
+    this.pos_2 += 8;
   }
   writeDoubleLE(value) {
-    this.#view_2.setFloat64(this.#pos_2, value, true);
-    this.#pos_2 += 8;
+    this.view_2.setFloat64(this.pos_2, value, true);
+    this.pos_2 += 8;
   }
 }
