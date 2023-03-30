@@ -1,10 +1,10 @@
-import { Struct } from './Struct.js';
+import { getNumberSize } from './Number.js';
 
 class ArrayT {
   constructor(type, length) {
     this.type = type;
     this.length = length;
-    this.size = Struct[`size${type}`] * length;
+    this.size = getNumberSize(type) * length;
   }
 }
 

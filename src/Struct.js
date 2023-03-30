@@ -1,23 +1,6 @@
+import { getNumberSize } from './Number.js';
+
 export class Struct {
-  /** static properties */
-  static sizeUInt8 = 1;
-  static sizeInt8 = 1;
-  static sizeUInt16BE = 2;
-  static sizeUInt16LE = 2;
-  static sizeInt16BE = 2;
-  static sizeInt16LE = 2;
-  static sizeUInt24BE = 3;
-  static sizeUInt24LE = 3;
-  static sizeInt24BE = 3;
-  static sizeInt24LE = 3;
-  static sizeUInt32BE = 4;
-  static sizeUInt32LE = 4;
-  static sizeInt32BE = 4;
-  static sizeInt32LE = 4;
-  static sizeFloatBE = 4;
-  static sizeFloatLE = 4;
-  static sizeDoubleBE = 8;
-  static sizeDoubleLE = 8;
 
   constructor(fields) {
     this.fields = fields;
@@ -27,8 +10,8 @@ export class Struct {
     this.arrays_index = 0;
 
     this.size = Object.values(fields).reduce((prev, curr) => {
-      if (typeof curr == 'string') { // Number
-        return prev += Struct[`size${curr}`];
+      if (typeof curr == 'number') { // Number
+        return prev += getNumberSize(curr);
       } else if ("length" in curr) { // Array
         this.arrays.push(new Array(curr.length));
         return prev += curr.size;
@@ -53,7 +36,7 @@ export class Struct {
     this.arrays_index = 0;
 
     for (const [k, v] of Object.entries(this.fields)) {
-      if (typeof v == 'string') { // Number
+      if (typeof v == 'number') { // Number
         // console.time('Number')
         this.results[k] = this[`read${v}`]();
         // console.timeEnd('Number')
@@ -79,7 +62,7 @@ export class Struct {
     this.pos_2 = 0;
 
     for (const [k, v] of Object.entries(this.fields)) {
-      if (typeof v == 'string') { // Number
+      if (typeof v == 'number') { // Number
         // console.time('Number')
         this[`write${v}`](values[k]);
         // console.timeEnd('Number')
@@ -111,7 +94,7 @@ export class Struct {
   }
 
   readBitfield(type, flags) {
-    if (typeof type == 'string') { // Number
+    if (typeof type == 'number') { // Number
       const value = this[`read${type}`]();
 
       for (let i = 0; i < flags.length; ++i) {
@@ -123,7 +106,7 @@ export class Struct {
     } else { // Array
       let flag_i = 0;
       for (let i = 0; i < type.size; ++i) {
-        const value = this.readUInt8();
+        const value = this.read0();
         for (let j = 0; j < 8; ++j) {
           const flag = flags[flag_i];
           if (flag != null) {
@@ -143,66 +126,66 @@ export class Struct {
     return chars.join('');
   }
 
-  readUInt8() {
+  read0() {
     return this.view_1.getUint8(this.pos_1++);
   }
-  readInt8() {
+  read1() {
     return this.view_1.getInt8(this.pos_1++);
   }
 
-  readUInt16BE() {
+  read2() {
     return this.view_1.getUint16((this.pos_1 += 2) - 2);
   }
-  readUInt16LE() {
+  read3() {
     return this.view_1.getUint16((this.pos_1 += 2) - 2, true);
   }
-  readInt16BE() {
+  read4() {
     return this.view_1.getInt16((this.pos_1 += 2) - 2);
   }
-  readInt16LE() {
+  read5() {
     return this.view_1.getInt16((this.pos_1 += 2) - 2, true);
   }
 
-  readUInt24BE() {
-    return (this.readUInt16BE() << 8) + this.readUInt8();
+  read6() {
+    return (this.read2() << 8) + this.read0();
   }
 
-  readUInt24LE() {
-    return this.readUInt16LE() + (this.readUInt8() << 16);
+  read7() {
+    return this.read3() + (this.read0() << 16);
   }
 
-  readInt24BE() {
-    return (this.readInt16BE() << 8) + this.readUInt8();
+  read8() {
+    return (this.read4() << 8) + this.read0();
   }
 
-  readInt24LE() {
-    return this.readUInt16LE() + (this.readInt8() << 16);
+  read9() {
+    return this.read3() + (this.read1() << 16);
   }
 
-  readUInt32BE() {
+  read10() {
     return this.view_1.getUint32((this.pos_1 += 4) - 4);
   }
-  readUInt32LE() {
+  read11() {
     return this.view_1.getUint32((this.pos_1 += 4) - 4, true);
   }
-  readInt32BE() {
+  read12() {
     return this.view_1.getInt32((this.pos_1 += 4) - 4);
   }
-  readInt32LE() {
+  read13() {
     return this.view_1.getInt32((this.pos_1 += 4) - 4, true);
   }
 
-  readFloatBE() {
+  read14() {
     return this.view_1.getFloat32((this.pos_1 += 4) - 4);
   }
-  readFloatLE() {
+  read15() {
     return this.view_1.getFloat32((this.pos_1 += 4) - 4, true);
   }
 
-  readDoubleBE() {
+  read16() {
     return this.view_1.getFloat64((this.pos_1 += 8) - 8);
   }
-  readDoubleLE() {
+  read17() {
     return this.view_1.getFloat64((this.pos_1 += 8) - 8, true);
   }
 
@@ -214,9 +197,8 @@ export class Struct {
     }
   }
 
-
   writeBitfield(type, flags, keys) {
-    if (typeof type == 'string') { // Number
+    if (typeof type == 'number') { // Number
       let value = 0;
       for (let i = 0; i < flags.length; ++i) {
         const flag = flags[i];
@@ -248,90 +230,89 @@ export class Struct {
     }
   }
 
-  writeUInt8(value) {
+  write0(value) {
     this.buffer[this.pos_2++] = value;
   }
-  writeInt8(value) {
-    this.view_2.setInt8(this.pos_2, value);
-    this.pos_2 += 1;
+  write1(value) {
+    this.view_2.setInt8(this.pos_2++, value);
   }
 
-  writeUInt16BE(value) {
+  write2(value) {
     this.view_2.setUint16(this.pos_2, value);
     this.pos_2 += 2;
   }
-  writeUInt16LE(value) {
+  write3(value) {
     this.view_2.setUint16(this.pos_2, value, true);
     this.pos_2 += 2;
   }
-  writeInt16BE(value) {
+  write4(value) {
     this.view_2.setInt16(this.pos_2, value);
     this.pos_2 += 2;
   }
-  writeInt16LE(value) {
+  write5(value) {
     this.view_2.setInt16(this.pos_2, value, true);
     this.pos_2 += 2;
   }
 
-  writeUInt24BE(value) {
+  write6(value) {
     this.buffer[this.pos_2++] = (value >>> 16) & 0xff;
     this.buffer[this.pos_2++] = (value >>> 8) & 0xff;
     this.buffer[this.pos_2++] = value & 0xff;
   }
 
-  writeUInt24LE(value) {
+  write7(value) {
     this.buffer[this.pos_2++] = value & 0xff;
     this.buffer[this.pos_2++] = (value >>> 8) & 0xff;
     this.buffer[this.pos_2++] = (value >>> 16) & 0xff;
   }
 
-  writeInt24BE(value) {
+  write8(value) {
     if (value >= 0) {
-      this.writeUInt24BE(value);
+      this.write6(value);
     } else {
-      this.writeUInt24BE(value + 0xffffff + 1);
+      this.write6(value + 0xffffff + 1);
     }
   }
 
-  writeInt24LE(value) {
+  write9(value) {
     if (value >= 0) {
-      this.writeUInt24LE(value);
+      this.write7(value);
     } else {
-      this.writeUInt24LE(value + 0xffffff + 1);
+      this.write7(value + 0xffffff + 1);
     }
   }
 
-  writeUInt32BE(value) {
+  write10(value) {
     this.view_2.setUint32(this.pos_2, value);
     this.pos_2 += 4;
   }
-  writeUInt32LE(value) {
+  write11(value) {
     this.view_2.setUint32(this.pos_2, value, true);
     this.pos_2 += 4;
   }
-  writeInt32BE(value) {
+  write12(value) {
     this.view_2.setInt32(this.pos_2, value);
     this.pos_2 += 4;
   }
-  writeInt32LE(value) {
+  write13(value) {
     this.view_2.setInt32(this.pos_2, value, true);
     this.pos_2 += 4;
   }
 
-  writeFloatBE(value) {
+  write14(value) {
     this.view_2.setFloat32(this.pos_2, value);
     this.pos_2 += 4;
   }
-  writeFloatLE(value) {
+  write15(value) {
     this.view_2.setFloat32(this.pos_2, value, true);
     this.pos_2 += 4;
   }
 
-  writeDoubleBE(value) {
+  write16(value) {
     this.view_2.setFloat64(this.pos_2, value);
     this.pos_2 += 8;
   }
-  writeDoubleLE(value) {
+  write17(value) {
     this.view_2.setFloat64(this.pos_2, value, true);
     this.pos_2 += 8;
   }
