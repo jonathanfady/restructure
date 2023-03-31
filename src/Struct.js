@@ -6,19 +6,14 @@ export class Struct {
     this.fields = fields;
     this.results = {};
 
-    this.arrays = [];
-    this.arrays_index = 0;
-
     this.size = Object.values(fields).reduce((prev, curr) => {
       if (typeof curr == 'string') { // Number
         return prev += getNumberSize(curr);
       } else if ("length" in curr) { // Array
-        this.arrays.push(new Array(curr.length));
         return prev += curr.size;
       } else if ("flags" in curr) { // Bitfield
         return prev += curr.size;
       } else { // String
-        this.arrays.push(new Array(curr.size));
         return prev += curr.size;
       }
     }, 0)
@@ -33,7 +28,6 @@ export class Struct {
   fromBuffer(buffer) {
     this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     this.pos_1 = 0;
-    this.arrays_index = 0;
 
     for (const k of Object.keys(this.fields)) {
       // console.time(k);
@@ -44,7 +38,7 @@ export class Struct {
         // console.timeEnd('Number')
       } else if ("length" in v) { // Array
         // console.time('Array')
-        this.results[k] = this.readArray(v.type);
+        this.results[k] = this.readArray(v.type, v.length);
         // console.timeEnd('Array')
       } else if ("flags" in v) { // Bitfield
         // console.time('Bitfield')
@@ -52,7 +46,7 @@ export class Struct {
         // console.timeEnd('Bitfield')
       } else { // String
         // console.time('String')
-        this.results[k] = this.readString();
+        this.results[k] = this.readString(v.size);
         // console.timeEnd('String')
       }
       // console.timeEnd(k);
@@ -91,9 +85,9 @@ export class Struct {
   }
 
   // DecodeStream
-  readArray(type) {
-    const arr = this.arrays[this.arrays_index++];
-    for (let i = 0; i < arr.length; ++i) {
+  readArray(type, length) {
+    const arr = new Array(length);
+    for (let i = 0; i < length; ++i) {
       arr[i] = this['read' + type]();
     }
     return arr;
@@ -124,9 +118,9 @@ export class Struct {
     }
   }
 
-  readString() {
-    const chars = this.arrays[this.arrays_index++];
-    for (let i = 0; i < chars.length; ++i) {
+  readString(length) {
+    const chars = new Array(length);
+    for (let i = 0; i < length; ++i) {
       chars[i] = String.fromCharCode(this.view_1.getUint8(this.pos_1++));
     }
     return chars.join('');
