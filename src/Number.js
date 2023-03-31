@@ -1,29 +1,29 @@
-export const uint8 = 0;
-export const int8 = 1;
-export const uint16be = 2;
+export const uint8 = 'Uint8';
+export const int8 = 'Int8';
+export const uint16be = 'Uint16BE';
 export const uint16 = uint16be;
-export const uint16le = 3;
-export const int16be = 4;
+export const uint16le = 'Uint16LE';
+export const int16be = 'Int16BE';
 export const int16 = int16be;
-export const int16le = 5;
-export const uint24be = 6;
+export const int16le = 'Int16LE';
+export const uint24be = 'Uint24BE';
 export const uint24 = uint24be;
-export const uint24le = 7;
-export const int24be = 8;
+export const uint24le = 'Uint24LE';
+export const int24be = 'Int24BE';
 export const int24 = int24be;
-export const int24le = 9;
-export const uint32be = 10;
+export const int24le = 'Int24LE';
+export const uint32be = 'Uint32BE';
 export const uint32 = uint32be;
-export const uint32le = 11;
-export const int32be = 12;
+export const uint32le = 'Uint32LE';
+export const int32be = 'Int32BE';
 export const int32 = int32be;
-export const int32le = 13;
-export const floatbe = 14;
+export const int32le = 'Int32LE';
+export const floatbe = 'FloatBE';
 export const float = floatbe;
-export const floatle = 15;
-export const doublebe = 16;
+export const floatle = 'FloatLE';
+export const doublebe = 'DoubleBE';
 export const double = doublebe;
-export const doublele = 17;
+export const doublele = 'DoubleLE';
 
 export function getNumberSize(type) {
   switch (type) {
