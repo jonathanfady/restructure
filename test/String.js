@@ -80,9 +80,18 @@ describe('String', function () {
   });
 
   describe('encode', function () {
-    it('should encode using string length', function () {
+    it('should encode', function () {
       const string = new Struct({ string: new StringT(7) });
       assert.deepEqual(string.toBuffer({ string: 'testing' }), Buffer.from('testing'));
+    });
+
+    it('should encode using predefined string length', function () {
+      const string = new Struct({ string: new StringT(10) });
+      assert.deepEqual(string.toBuffer({ string: 'testing' }), Buffer.from('testing\u0000\u0000\u0000'));
+    });
+    it('should encode using predefined string length', function () {
+      const string = new Struct({ string: new StringT(7) });
+      assert.deepEqual(string.toBuffer({ string: 'testingandsomemoretext' }), Buffer.from('testing'));
     });
 
     // it('should encode length as number before string', function () {

@@ -32,7 +32,7 @@
     "encode",
     "decode"
   ],
-  "author": "Jonathan Fady <jonathan.fady@gmail.com>, Devon Govett <devongovett@gmail.com>",
+  "author": "Jonathan Fady <jonathan.fady@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jonathanfady/restructure/issues"

@@ -81,9 +81,19 @@ describe('Array', function () {
   });
 
   describe('encode', function () {
+    it('should encode', function () {
+      const array = new Struct({ arr: new ArrayT(uint8, 4) });
+      assert.deepEqual(array.toBuffer({ arr: [1, 2, 3, 4] }), new Uint8Array([1, 2, 3, 4]));
+    });
+
     it('should encode using array length', function () {
       const array = new Struct({ arr: new ArrayT(uint8, 10) });
       assert.deepEqual(array.toBuffer({ arr: [1, 2, 3, 4] }), new Uint8Array([1, 2, 3, 4, 0, 0, 0, 0, 0, 0]));
+    });
+
+    it('should encode using array length', function () {
+      const array = new Struct({ arr: new ArrayT(uint8, 4) });
+      assert.deepEqual(array.toBuffer({ arr: [1, 2, 3, 4, 0, 1, 2, 3, 4, 5] }), new Uint8Array([1, 2, 3, 4]));
     });
 
     // it('should encode length as number before array', function () {
