@@ -9,8 +9,6 @@ import {
   int32, int32be, int32le,
   float, floatbe, floatle,
   double, doublebe, doublele,
-  // fixed16, fixed16be, fixed16le,
-  // fixed32, fixed32be, fixed32le,
   Struct
 } from '@jonathanfady/restructure';
 import assert from 'assert';
@@ -315,68 +313,4 @@ describe('Number', function () {
       assert.deepEqual(number.toBuffer({ number: 1234.56 }), new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
     });
   });
-
-  // describe('fixed16', () =>
-  //   it('is an alias for fixed16be', () => assert.deepEqual(fixed16, fixed16be))
-  // );
-
-  // describe('fixed16be', function () {
-  //   it('should decode', function () {
-  //     const value = fixed16be.fromBuffer(new Uint8Array([0x19, 0x57]));
-  //     assert(value >= 25.34 - 0.005);
-  //     assert(value <= 25.34 + 0.005);
-  //   });
-
-  //   it('should have a size', () => assert.equal(fixed16be.size(), 2));
-
-  //   it('should encode', function () {
-  //     assert.deepEqual(fixed16be.toBuffer(25.34), new Uint8Array([0x19, 0x57]));
-  //   });
-  // });
-
-  // describe('fixed16le', function () {
-  //   it('should decode', function () {
-  //     const value = fixed16le.fromBuffer(new Uint8Array([0x57, 0x19]));
-  //     assert(value >= 25.34 - 0.005);
-  //     assert(value <= 25.34 + 0.005);
-  //   });
-
-  //   it('should have a size', () => assert.equal(fixed16le.size(), 2));
-
-  //   it('should encode', function () {
-  //     assert.deepEqual(fixed16le.toBuffer(25.34), new Uint8Array([0x57, 0x19]));
-  //   });
-  // });
-
-  // describe('fixed32', () =>
-  //   it('is an alias for fixed32be', () => assert.deepEqual(fixed32, fixed32be))
-  // );
-
-  // describe('fixed32be', function () {
-  //   it('should decode', function () {
-  //     const value = fixed32be.fromBuffer(new Uint8Array([0x00, 0xfa, 0x8c, 0xcc]));
-  //     assert(value >= 250.55 - 0.005);
-  //     assert(value <= 250.55 + 0.005);
-  //   });
-
-  //   it('should have a size', () => assert.equal(fixed32be.size(), 4));
-
-  //   it('should encode', function () {
-  //     assert.deepEqual(fixed32be.toBuffer(250.55), new Uint8Array([0x00, 0xfa, 0x8c, 0xcc]));
-  //   });
-  // });
-
-  // describe('fixed32le', function () {
-  //   it('should decode', function () {
-  //     const value = fixed32le.fromBuffer(new Uint8Array([0xcc, 0x8c, 0xfa, 0x00]));
-  //     assert(value >= 250.55 - 0.005);
-  //     assert(value <= 250.55 + 0.005);
-  //   });
-
-  //   it('should have a size', () => assert.equal(fixed32le.size(), 4));
-
-  //   it('should encode', function () {
-  //     assert.deepEqual(fixed32le.toBuffer(250.55), new Uint8Array([0xcc, 0x8c, 0xfa, 0x00]));
-  //   });
-  // });
 });

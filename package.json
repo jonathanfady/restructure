@@ -14,12 +14,12 @@
     "module": false
   },
   "devDependencies": {
+    "c8": "^7.13.0",
     "mocha": "^10.0.0",
-    "nyc": "^15.1.0",
     "parcel": "^2.6.1"
   },
   "scripts": {
-    "test": "nyc --all --reporter=lcov --reporter=text mocha",
+    "test": "c8 --reporter=lcov --reporter=text mocha",
     "build": "parcel build",
     "prepublishOnly": "parcel build"
   },
