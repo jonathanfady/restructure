@@ -67,7 +67,7 @@ export class Struct {
         // console.timeEnd('Number')
       } else if ("length" in v) { // Array
         // console.time('Array')
-        this.writeArray(v.type, values[k]);
+        this.writeArray(v.type, v.length, values[k]);
         // console.timeEnd('Array')
       } else if ("flags" in v) { // Bitfield
         // console.time('Bitfield')
@@ -75,7 +75,7 @@ export class Struct {
         // console.timeEnd('Bitfield')
       } else { // String
         // console.time('String')
-        this.writeString(values[k]);
+        this.writeString(v.size, values[k]);
         // console.timeEnd('String')
       }
       // console.timeEnd(k);
@@ -190,8 +190,8 @@ export class Struct {
   }
 
   // EncodeStream
-  writeArray(type, array) {
-    for (let i = 0; i < array.length; ++i) {
+  writeArray(type, length, array) {
+    for (let i = 0; i < length; ++i) {
       const value = array[i];
       this['write' + type](value);
     }
@@ -224,8 +224,8 @@ export class Struct {
     }
   }
 
-  writeString(string) {
-    for (let i = 0; i < string.length; ++i) {
+  writeString(length, string) {
+    for (let i = 0; i < length; ++i) {
       this.buffer[this.pos_2++] = string.charCodeAt(i);
     }
   }
