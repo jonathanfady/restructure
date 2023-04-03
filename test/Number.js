@@ -191,7 +191,11 @@ describe('Number', function () {
 
     it('should have a size', () => assert.equal(number.size, 3));
 
-    it('should encode', function () {
+    it('should encode positive', function () {
+      assert.deepEqual(number.toBuffer({ number: 21724 }), new Uint8Array([0x00, 0x54, 0xDC]));
+    });
+
+    it('should encode negative', function () {
       assert.deepEqual(number.toBuffer({ number: -21724 }), new Uint8Array([0xff, 0xab, 0x24]));
     });
   });
@@ -205,7 +209,11 @@ describe('Number', function () {
 
     it('should have a size', () => assert.equal(number.size, 3));
 
-    it('should encode', function () {
+    it('should encode positive', function () {
+      assert.deepEqual(number.toBuffer({ number: 21724 }), new Uint8Array([0xDC, 0x54, 0x00]));
+    });
+
+    it('should encode negative', function () {
       assert.deepEqual(number.toBuffer({ number: -21724 }), new Uint8Array([0x24, 0xab, 0xff]));
     });
   });
@@ -312,5 +320,11 @@ describe('Number', function () {
     it('should encode', function () {
       assert.deepEqual(number.toBuffer({ number: 1234.56 }), new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
     });
+  });
+
+  describe('unknown', function () {
+    const number = new Struct({ number: 'unknown' });
+
+    it('should have a size', () => assert.equal(number.size, 0));
   });
 });

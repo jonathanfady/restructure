@@ -192,8 +192,7 @@ export class Struct {
   // EncodeStream
   writeArray(type, length, array) {
     for (let i = 0; i < length; ++i) {
-      const value = array[i];
-      this['write' + type](value);
+      this['write' + type](array[i] ?? 0);
     }
   }
 
