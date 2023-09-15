@@ -18,7 +18,7 @@ below for more information.
 import * as r from 'restructure';
 
 let Person = new r.Struct({
-  name: new r.String(r.uint8),
+  name: r.String(r.uint8),
   age: r.uint8
 });
 
@@ -65,25 +65,25 @@ uint16be, uint24be, uint32be, int16be, int24be, int32be, floatbe, doublebe
 The `Bitfield` type maps a number to an object with boolean keys mapping to each bit in that number,
 as defined in an array.
 You can also use an Array type with a fixed length to describe long bitfields that don't fit in a number type.
-When you define a bitfield in a Struct, the key provided will be ignored and the results Object will contain the flags as keys directly on the results Object.
+When you define a bitfield in a Struct, the key provided will be ignored and the results Map will contain the flags directly as keys.
 
 ```javascript
 var buffer = new Uint8Array([0xD9 , 0x5B])
 
-var bitfield1 = new r.Bitfield(r.uint8, ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack']);
+var bitfield1 = r.Bitfield(r.uint8, ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack']);
 var struct1 = new Struct({bitfield: bitfield1});
 
 // struct1.fromBuffer(buffer)
-var result1 = {
+var result1 = Map(8) {
   Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true
 };
 
-var bitfield2 = new r.Bitfield(new Array(r.uint8, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack',
+var bitfield2 = r.Bitfield(r.Array(r.uint8, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack',
 'Rack', 'Sack', 'Tack', 'Uack', 'Vack', 'Wack', 'Xack', 'Yack']);
 var struct2 = new Struct({whateverKey: bitfield2});
 
 // struct2.fromBuffer(buffer)
-var result2 = {
+var result2 = Map(16) {
   Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true,
   Rack: true, Sack: true, Tack: false, Uack: true, Vack: true, Wack: false, Xack: true, Yack: false
 };
@@ -99,7 +99,7 @@ The encoding is `'utf8'`.
 
 ```javascript
 // fixed length
-var str = new r.String(2);
+var str = r.String(2);
 ```
 
 ### Array
@@ -108,7 +108,7 @@ An `Array` maps to and from a JavaScript array containing instances of a sub-typ
 
 ```javascript
 // fixed length, containing numbers
-var arr = new r.Array(r.uint16, 2);
+var arr = r.Array(r.uint16, 2);
 ```
 
 ### Struct
@@ -117,7 +117,7 @@ A `Struct` maps to and from JavaScript objects, containing keys of various previ
 
 ```javascript
 var Person = new r.Struct({
-  name: new r.String(r.uint8),
+  name: r.String(r.uint8),
   age: r.uint8
 });
 ```

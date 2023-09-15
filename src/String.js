@@ -1,7 +1,7 @@
-class StringT {
-  constructor(length) {
-    this.size = length;
-  }
+function StringT(size) {
+  return {
+    size,
+  };
 }
 
 export { StringT as String };

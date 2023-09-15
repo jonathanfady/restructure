@@ -1,10 +1,10 @@
 import { getNumberSize } from './Number.js';
 
-class ArrayT {
-  constructor(type, length) {
-    this.type = type;
-    this.length = length;
-    this.size = getNumberSize(type) * length;
+function ArrayT(type, length) {
+  return {
+    type,
+    length,
+    size: getNumberSize(type) * length,
   }
 }
 

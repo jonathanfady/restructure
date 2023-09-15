@@ -4,19 +4,29 @@ export class Struct {
 
   constructor(fields) {
     this.fields = fields;
-    this.results = {};
+    this.results = new Map();
 
-    this.size = Object.values(fields).reduce((prev, curr) => {
-      if (typeof curr == 'string') { // Number
-        return prev += getNumberSize(curr);
-      } else if ("length" in curr) { // Array
-        return prev += curr.size;
-      } else if ("flags" in curr) { // Bitfield
-        return prev += curr.size;
+    this.size = 0;
+    for (const k in this.fields) {
+      const value = this.fields[k];
+      if (typeof value == 'string') { // Number
+        this.results.set(k, 0);
+        this.size += getNumberSize(value);
+      } else if ("length" in value) { // Array
+        this.results.set(k, new Array(value.size));
+        this.size += value.size;
+      } else if ("flags" in value) { // Bitfield
+        for (const flag of value.flags) {
+          if (flag) {
+            this.results.set(flag, false);
+          }
+        }
+        this.size += value.size;
       } else { // String
-        return prev += curr.size;
+        this.results.set(k, '');
+        this.size += value.size;
       }
-    }, 0)
+    }
 
     this.buffer = new Uint8Array(this.size);
     this.view_1 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
@@ -29,16 +39,16 @@ export class Struct {
     this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     this.pos_1 = 0;
 
-    for (const k of Object.keys(this.fields)) {
+    for (const k in this.fields) {
       // console.time(k);
       const v = this.fields[k];
       if (typeof v == 'string') { // Number
         // console.time('Number')
-        this.results[k] = this['read' + v]();
+        this.results.set(k, this['read' + v]());
         // console.timeEnd('Number')
       } else if ("length" in v) { // Array
         // console.time('Array')
-        this.results[k] = this.readArray(v.type, v.length);
+        this.results.set(k, this.readArray(v.type, v.length));
         // console.timeEnd('Array')
       } else if ("flags" in v) { // Bitfield
         // console.time('Bitfield')
@@ -46,7 +56,7 @@ export class Struct {
         // console.timeEnd('Bitfield')
       } else { // String
         // console.time('String')
-        this.results[k] = this.readString(v.size);
+        this.results.set(k, this.readString(v.size));
         // console.timeEnd('String')
       }
       // console.timeEnd(k);
@@ -58,7 +68,7 @@ export class Struct {
   toBuffer(values) {
     this.pos_2 = 0;
 
-    for (const k of Object.keys(this.fields)) {
+    for (const k in this.fields) {
       // console.time(k);
       const v = this.fields[k];
       if (typeof v == 'string') { // Number
@@ -100,7 +110,7 @@ export class Struct {
       for (let i = 0; i < flags.length; ++i) {
         const flag = flags[i];
         if (flag != null) {
-          this.results[flag] = !!(value & (1 << i));
+          this.results.set(flag, !!(value & (1 << i)));
         }
       }
     } else { // Array
@@ -110,7 +120,7 @@ export class Struct {
         for (let j = 0; j < 8; ++j) {
           const flag = flags[flag_i];
           if (flag != null) {
-            this.results[flag] = !!(value & (1 << j));
+            this.results.set(flag, !!(value & (1 << j)));
           }
           flag_i++;
         }

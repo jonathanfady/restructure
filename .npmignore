@@ -1,5 +1,5 @@
 .github/
 .parcel-cache/
-node_modules/
 coverage/
+node_modules/
 coverage.html

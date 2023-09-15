@@ -1,12 +1,9 @@
 import { getNumberSize } from './Number.js';
 
-export class Bitfield {
-  constructor(type, flags = []) {
-    this.type = type;
-    this.flags = flags;
-    if (typeof type == 'string') // Number
-      this.size = getNumberSize(type);
-    else // Array
-      this.size = type.size;
+export function Bitfield(type, flags = []) {
+  return {
+    type,
+    flags,
+    size: (typeof type == 'string') ? getNumberSize(type) : type.size, // ? Number : Array
   }
 }

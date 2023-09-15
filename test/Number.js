@@ -18,8 +18,8 @@ describe('Number', function () {
     const number = new Struct({ number: uint8 });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xab, 0xff])), { number: 0xab });
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab])), { number: 0xff });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xab, 0xff])), new Map(Object.entries({ number: 0xab })));
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab])), new Map(Object.entries({ number: 0xff })));
     });
 
     it('should have a size', function () {
@@ -40,7 +40,7 @@ describe('Number', function () {
     const number = new Struct({ number: uint16be });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xab, 0xff])), { number: 0xabff });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xab, 0xff])), new Map(Object.entries({ number: 0xabff })));
     });
 
     it('should have a size', function () {
@@ -56,7 +56,7 @@ describe('Number', function () {
     const number = new Struct({ number: uint16le });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab])), { number: 0xabff });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab])), new Map(Object.entries({ number: 0xabff })));
     });
 
     it('should have a size', () => assert.equal(number.size, 2));
@@ -74,7 +74,7 @@ describe('Number', function () {
     const number = new Struct({ number: uint24be });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab, 0x24])), { number: 0xffab24 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab, 0x24])), new Map(Object.entries({ number: 0xffab24 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 3));
@@ -88,7 +88,7 @@ describe('Number', function () {
     const number = new Struct({ number: uint24le });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0x24, 0xab, 0xff])), { number: 0xffab24 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0x24, 0xab, 0xff])), new Map(Object.entries({ number: 0xffab24 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 3));
@@ -106,7 +106,7 @@ describe('Number', function () {
     const number = new Struct({ number: uint32be });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab, 0x24, 0xbf])), { number: 0xffab24bf });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab, 0x24, 0xbf])), new Map(Object.entries({ number: 0xffab24bf })));
     });
 
     it('should have a size', () => assert.equal(number.size, 4));
@@ -120,7 +120,7 @@ describe('Number', function () {
     const number = new Struct({ number: uint32le });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xbf, 0x24, 0xab, 0xff])), { number: 0xffab24bf });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xbf, 0x24, 0xab, 0xff])), new Map(Object.entries({ number: 0xffab24bf })));
     });
 
     it('should have a size', () => assert.equal(number.size, 4));
@@ -134,8 +134,8 @@ describe('Number', function () {
     const number = new Struct({ number: int8 });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0x7f, 0xff])), { number: 127 });
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0x7f])), { number: -1 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0x7f, 0xff])), new Map(Object.entries({ number: 127 })));
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0x7f])), new Map(Object.entries({ number: -1 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 1));
@@ -154,7 +154,7 @@ describe('Number', function () {
     const number = new Struct({ number: int16be });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab])), { number: -85 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab])), new Map(Object.entries({ number: -85 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 2));
@@ -168,7 +168,7 @@ describe('Number', function () {
     const number = new Struct({ number: int16le });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xab, 0xff])), { number: -85 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xab, 0xff])), new Map(Object.entries({ number: -85 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 2));
@@ -186,7 +186,7 @@ describe('Number', function () {
     const number = new Struct({ number: int24be });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab, 0x24])), { number: -21724 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab, 0x24])), new Map(Object.entries({ number: -21724 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 3));
@@ -204,7 +204,7 @@ describe('Number', function () {
     const number = new Struct({ number: int24le });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0x24, 0xab, 0xff])), { number: -21724 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0x24, 0xab, 0xff])), new Map(Object.entries({ number: -21724 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 3));
@@ -226,7 +226,7 @@ describe('Number', function () {
     const number = new Struct({ number: int32be });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab, 0x24, 0xbf])), { number: -5561153 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xff, 0xab, 0x24, 0xbf])), new Map(Object.entries({ number: -5561153 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 4));
@@ -240,7 +240,7 @@ describe('Number', function () {
     const number = new Struct({ number: int32le });
 
     it('should decode', function () {
-      assert.deepEqual(number.fromBuffer(new Uint8Array([0xbf, 0x24, 0xab, 0xff])), { number: -5561153 });
+      assert.deepEqual(number.fromBuffer(new Uint8Array([0xbf, 0x24, 0xab, 0xff])), new Map(Object.entries({ number: -5561153 })));
     });
 
     it('should have a size', () => assert.equal(number.size, 4));
@@ -259,8 +259,8 @@ describe('Number', function () {
 
     it('should decode', function () {
       const value = number.fromBuffer(new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
-      assert(value.number >= 250.55 - 0.005);
-      assert(value.number <= 250.55 + 0.005);
+      assert(value.get('number') >= 250.55 - 0.005);
+      assert(value.get('number') <= 250.55 + 0.005);
     });
 
     it('should have a size', () => assert.equal(number.size, 4));
@@ -275,8 +275,8 @@ describe('Number', function () {
 
     it('should decode', function () {
       const value = number.fromBuffer(new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
-      assert(value.number >= 250.55 - 0.005);
-      assert(value.number <= 250.55 + 0.005);
+      assert(value.get('number') >= 250.55 - 0.005);
+      assert(value.get('number') <= 250.55 + 0.005);
     });
 
     it('should have a size', () => assert.equal(number.size, 4));
@@ -295,8 +295,8 @@ describe('Number', function () {
 
     it('should decode', function () {
       const value = number.fromBuffer(new Uint8Array(new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a])));
-      assert(value.number >= 1234.56 - 0.005);
-      assert(value.number <= 1234.56 + 0.005);
+      assert(value.get('number') >= 1234.56 - 0.005);
+      assert(value.get('number') <= 1234.56 + 0.005);
     });
 
     it('should have a size', () => assert.equal(number.size, 8));
@@ -311,8 +311,8 @@ describe('Number', function () {
 
     it('should decode', function () {
       const value = number.fromBuffer(new Uint8Array(new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40])));
-      assert(value.number >= 1234.56 - 0.005);
-      assert(value.number <= 1234.56 + 0.005);
+      assert(value.get('number') >= 1234.56 - 0.005);
+      assert(value.get('number') <= 1234.56 + 0.005);
     });
 
     it('should have a size', () => assert.equal(number.size, 8));
