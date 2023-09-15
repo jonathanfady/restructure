@@ -73,11 +73,11 @@ export class Struct {
       const v = this.fields[k];
       if (typeof v == 'string') { // Number
         // console.time('Number')
-        this['write' + v](values[k]);
+        this['write' + v](values.get(k));
         // console.timeEnd('Number')
       } else if ("length" in v) { // Array
         // console.time('Array')
-        this.writeArray(v.type, v.length, values[k]);
+        this.writeArray(v.type, v.length, values.get(k));
         // console.timeEnd('Array')
       } else if ("flags" in v) { // Bitfield
         // console.time('Bitfield')
@@ -85,7 +85,7 @@ export class Struct {
         // console.timeEnd('Bitfield')
       } else { // String
         // console.time('String')
-        this.writeString(v.size, values[k]);
+        this.writeString(v.size, values.get(k));
         // console.timeEnd('String')
       }
       // console.timeEnd(k);
@@ -211,7 +211,7 @@ export class Struct {
       let value = 0;
       for (let i = 0; i < flags.length; ++i) {
         const flag = flags[i];
-        if ((flag != null) && (keys[flag])) {
+        if ((flag != null) && (keys.get(flag))) {
           value |= (1 << i);
         }
       }
@@ -223,7 +223,7 @@ export class Struct {
         let value = 0;
         for (let j = 0; j < 8; ++j) {
           const flag = flags[flag_i];
-          if ((flag != null) && (keys[flag])) {
+          if ((flag != null) && (keys.get(flag))) {
             value |= (1 << j);
           }
           flag_i++;

@@ -27,8 +27,8 @@ describe('Number', function () {
     });
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 0xab }), new Uint8Array([0xab]));
-      assert.deepEqual(number.toBuffer({ number: 0xff }), new Uint8Array([0xff]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 0xab }))), new Uint8Array([0xab]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 0xff }))), new Uint8Array([0xff]));
     });
   });
 
@@ -48,7 +48,7 @@ describe('Number', function () {
     });
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 0xabff }), new Uint8Array([0xab, 0xff]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 0xabff }))), new Uint8Array([0xab, 0xff]));
     });
   });
 
@@ -62,7 +62,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 2));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 0xabff }), new Uint8Array([0xff, 0xab]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 0xabff }))), new Uint8Array([0xff, 0xab]));
     });
   });
 
@@ -80,7 +80,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 3));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 0xffab24 }), new Uint8Array([0xff, 0xab, 0x24]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 0xffab24 }))), new Uint8Array([0xff, 0xab, 0x24]));
     });
   });
 
@@ -94,7 +94,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 3));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 0xffab24 }), new Uint8Array([0x24, 0xab, 0xff]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 0xffab24 }))), new Uint8Array([0x24, 0xab, 0xff]));
     });
   });
 
@@ -112,7 +112,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 4));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 0xffab24bf }), new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 0xffab24bf }))), new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
     });
   });
 
@@ -126,7 +126,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 4));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 0xffab24bf }), new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 0xffab24bf }))), new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
     });
   });
 
@@ -141,8 +141,8 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 1));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 127 }), new Uint8Array([0x7f]));
-      assert.deepEqual(number.toBuffer({ number: -1 }), new Uint8Array([0xff]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 127 }))), new Uint8Array([0x7f]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: -1 }))), new Uint8Array([0xff]));
     });
   });
 
@@ -160,7 +160,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 2));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: -85 }), new Uint8Array([0xff, 0xab]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: -85 }))), new Uint8Array([0xff, 0xab]));
     });
   });
 
@@ -174,7 +174,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 2));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: -85 }), new Uint8Array([0xab, 0xff]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: -85 }))), new Uint8Array([0xab, 0xff]));
     });
   });
 
@@ -192,11 +192,11 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 3));
 
     it('should encode positive', function () {
-      assert.deepEqual(number.toBuffer({ number: 21724 }), new Uint8Array([0x00, 0x54, 0xDC]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 21724 }))), new Uint8Array([0x00, 0x54, 0xDC]));
     });
 
     it('should encode negative', function () {
-      assert.deepEqual(number.toBuffer({ number: -21724 }), new Uint8Array([0xff, 0xab, 0x24]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: -21724 }))), new Uint8Array([0xff, 0xab, 0x24]));
     });
   });
 
@@ -210,11 +210,11 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 3));
 
     it('should encode positive', function () {
-      assert.deepEqual(number.toBuffer({ number: 21724 }), new Uint8Array([0xDC, 0x54, 0x00]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 21724 }))), new Uint8Array([0xDC, 0x54, 0x00]));
     });
 
     it('should encode negative', function () {
-      assert.deepEqual(number.toBuffer({ number: -21724 }), new Uint8Array([0x24, 0xab, 0xff]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: -21724 }))), new Uint8Array([0x24, 0xab, 0xff]));
     });
   });
 
@@ -232,7 +232,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 4));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: -5561153 }), new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: -5561153 }))), new Uint8Array([0xff, 0xab, 0x24, 0xbf]));
     });
   });
 
@@ -246,7 +246,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 4));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: -5561153 }), new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: -5561153 }))), new Uint8Array([0xbf, 0x24, 0xab, 0xff]));
     });
   });
 
@@ -266,7 +266,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 4));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 250.55 }), new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 250.55 }))), new Uint8Array([0x43, 0x7a, 0x8c, 0xcd]));
     });
   });
 
@@ -282,7 +282,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 4));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 250.55 }), new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 250.55 }))), new Uint8Array([0xcd, 0x8c, 0x7a, 0x43]));
     });
   });
 
@@ -302,7 +302,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 8));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 1234.56 }), new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 1234.56 }))), new Uint8Array([0x40, 0x93, 0x4a, 0x3d, 0x70, 0xa3, 0xd7, 0x0a]));
     });
   });
 
@@ -318,7 +318,7 @@ describe('Number', function () {
     it('should have a size', () => assert.equal(number.size, 8));
 
     it('should encode', function () {
-      assert.deepEqual(number.toBuffer({ number: 1234.56 }), new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
+      assert.deepEqual(number.toBuffer(new Map(Object.entries({ number: 1234.56 }))), new Uint8Array([0x0a, 0xd7, 0xa3, 0x70, 0x3d, 0x4a, 0x93, 0x40]));
     });
   });
 
