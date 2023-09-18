@@ -3,12 +3,11 @@ import { getNumberSize } from './Number.js';
 export class Struct {
 
   constructor(fields) {
-    this.fields = fields;
+    this.fields = new Map(Object.entries(fields));
     this.results = new Map();
 
     this.size = 0;
-    for (const k in this.fields) {
-      const value = this.fields[k];
+    for (const [k, value] of this.fields) {
       if (typeof value == 'string') { // Number
         this.results.set(k, 0);
         this.size += getNumberSize(value);
@@ -39,9 +38,8 @@ export class Struct {
     this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     this.pos_1 = 0;
 
-    for (const k in this.fields) {
+    for (const [k, v] of this.fields) {
       // console.time(k);
-      const v = this.fields[k];
       if (typeof v == 'string') { // Number
         // console.time('Number')
         this.results.set(k, this['read' + v]());
@@ -68,9 +66,8 @@ export class Struct {
   toBuffer(values) {
     this.pos_2 = 0;
 
-    for (const k in this.fields) {
+    for (const [k, v] of this.fields) {
       // console.time(k);
-      const v = this.fields[k];
       if (typeof v == 'string') { // Number
         // console.time('Number')
         this['write' + v](values.get(k));
