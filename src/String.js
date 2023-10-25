@@ -1,7 +1,5 @@
-function StringT(size) {
+export function String(size) {
   return {
     size,
   };
 }
-
-export { StringT as String };

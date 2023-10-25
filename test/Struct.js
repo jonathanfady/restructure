@@ -1,11 +1,11 @@
 import assert from 'assert';
-import { Bitfield, Struct, String as StringT, uint8, uint16le, uint32le } from '@jonathanfady/restructure';
+import { Bitfield, Struct, String, uint8, uint16le, uint32le } from '../src/index.js';
 
 describe('Struct', function () {
   describe('decode', function () {
     it('should decode into an object', function () {
       const struct = new Struct({
-        name: StringT(6),
+        name: String(6),
         age: uint8,
         true_age: uint8,
       });
@@ -37,7 +37,7 @@ describe('Struct', function () {
   describe('size', function () {
     it('should get the correct size when no value is given', function () {
       const struct = new Struct({
-        name: StringT(4),
+        name: String(4),
         age: uint8
       });
 
@@ -46,7 +46,7 @@ describe('Struct', function () {
 
     it('should get the correct size', function () {
       const struct = new Struct({
-        name: StringT(6),
+        name: String(6),
         age: uint8,
         true_age: uint8,
       });
@@ -69,7 +69,7 @@ describe('Struct', function () {
   describe('encode', function () {
     it('should encode objects to buffers', function () {
       const struct = new Struct({
-        name: StringT(6),
+        name: String(6),
         age: uint8
       });
 

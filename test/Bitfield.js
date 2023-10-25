@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Bitfield, uint8, uint16le, Array as ArrayT, Struct } from '@jonathanfady/restructure';
+import { Bitfield, uint8, uint16le, Array, Struct } from '../src/index.js';
 
 describe('Bitfield', function () {
   const JACK = 1 << 0;
@@ -43,7 +43,7 @@ describe('Bitfield', function () {
   })
 
   describe('bitfield2', function () {
-    const bitfield2 = new Struct({ bitfield2: Bitfield(ArrayT(uint8, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack', 'Rack', 'Sack', 'Tack', 'Uack', 'Vack', 'Wack', 'Xack', 'Yack']) });
+    const bitfield2 = new Struct({ bitfield2: Bitfield(Array(uint8, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack', 'Rack', 'Sack', 'Tack', 'Uack', 'Vack', 'Wack', 'Xack', 'Yack']) });
 
     it('should have the right size', () => assert.equal(bitfield2.size, 2));
 
@@ -66,7 +66,7 @@ describe('Bitfield', function () {
   })
 
   describe('bitfield3', function () {
-    const bitfield3 = new Struct({ bitfield3: Bitfield(ArrayT(uint16le, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack', 'Rack', 'Sack', 'Tack', 'Uack', 'Vack', 'Wack', 'Xack', 'Yack', 'Zack']) });
+    const bitfield3 = new Struct({ bitfield3: Bitfield(Array(uint16le, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack', 'Rack', 'Sack', 'Tack', 'Uack', 'Vack', 'Wack', 'Xack', 'Yack', 'Zack']) });
 
     it('should have the right size', () => assert.equal(bitfield3.size, 4));
 

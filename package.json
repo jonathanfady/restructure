@@ -1,27 +1,20 @@
 {
   "name": "@jonathanfady/restructure",
-  "version": "1.1.0",
+  "version": "1.5.0",
   "description": "Declaratively encode and decode binary data",
   "type": "module",
-  "main": "./dist/main.cjs",
-  "module": "./index.js",
-  "source": "./index.js",
-  "exports": {
-    "import": "./index.js",
-    "require": "./dist/main.cjs"
-  },
-  "targets": {
-    "module": false
-  },
+  "source": "./src/index.js",
+  "main": "./dist/index.js",
   "devDependencies": {
-    "c8": "^7.13.0",
+    "c8": "^8.0.1",
     "mocha": "^10.0.0",
-    "parcel": "^2.6.1"
+    "parcel": "^2.10.1",
+    "typescript": "^5.2.2"
   },
   "scripts": {
     "test": "c8 --reporter=lcov --reporter=text mocha",
-    "build": "parcel build",
-    "prepublishOnly": "parcel build"
+    "build": "tsc && parcel build",
+    "prepublishOnly": "tsc && parcel build"
   },
   "repository": {
     "type": "git",

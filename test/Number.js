@@ -1,3 +1,4 @@
+import assert from 'assert';
 import {
   uint8,
   uint16, uint16be, uint16le,
@@ -10,8 +11,7 @@ import {
   float, floatbe, floatle,
   double, doublebe, doublele,
   Struct
-} from '@jonathanfady/restructure';
-import assert from 'assert';
+} from '../src/index.js';
 
 describe('Number', function () {
   describe('uint8', function () {
