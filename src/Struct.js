@@ -12,7 +12,7 @@ export class Struct {
         this.results.set(k, 0);
         this.size += getNumberSize(value);
       } else if ("length" in value) { // Array
-        this.results.set(k, new Array(value.size));
+        this.results.set(k, new Array(value.size).fill(0));
         this.size += value.size;
       } else if ("flags" in value) { // Bitfield
         for (const flag of value.flags) {
@@ -22,7 +22,7 @@ export class Struct {
         }
         this.size += value.size;
       } else { // String
-        this.results.set(k, '');
+        this.results.set(k, ' '.repeat(value.size));
         this.size += value.size;
       }
     }
@@ -39,25 +39,15 @@ export class Struct {
     this.pos_1 = 0;
 
     for (const [k, v] of this.fields) {
-      // console.time(k);
       if (typeof v == 'string') { // Number
-        // console.time('Number')
         this.results.set(k, this['read' + v]());
-        // console.timeEnd('Number')
       } else if ("length" in v) { // Array
-        // console.time('Array')
         this.results.set(k, this.readArray(v.type, v.length));
-        // console.timeEnd('Array')
       } else if ("flags" in v) { // Bitfield
-        // console.time('Bitfield')
         this.readBitfield(v.type, v.flags);
-        // console.timeEnd('Bitfield')
       } else { // String
-        // console.time('String')
         this.results.set(k, this.readString(v.size));
-        // console.timeEnd('String')
       }
-      // console.timeEnd(k);
     }
 
     return this.results;
@@ -67,25 +57,15 @@ export class Struct {
     this.pos_2 = 0;
 
     for (const [k, v] of this.fields) {
-      // console.time(k);
       if (typeof v == 'string') { // Number
-        // console.time('Number')
         this['write' + v](values.get(k));
-        // console.timeEnd('Number')
       } else if ("length" in v) { // Array
-        // console.time('Array')
         this.writeArray(v.type, v.length, values.get(k));
-        // console.timeEnd('Array')
       } else if ("flags" in v) { // Bitfield
-        // console.time('Bitfield')
         this.writeBitfield(v.type, v.flags, values);
-        // console.timeEnd('Bitfield')
       } else { // String
-        // console.time('String')
         this.writeString(v.size, values.get(k));
-        // console.timeEnd('String')
       }
-      // console.timeEnd(k);
     }
 
     return this.buffer;
@@ -203,12 +183,12 @@ export class Struct {
     }
   }
 
-  writeBitfield(type, flags, keys) {
+  writeBitfield(type, flags, values) {
     if (typeof type == 'string') { // Number
       let value = 0;
       for (let i = 0; i < flags.length; ++i) {
         const flag = flags[i];
-        if ((flag != null) && (keys.get(flag))) {
+        if ((flag != null) && (values.get(flag))) {
           value |= (1 << i);
         }
       }
@@ -220,7 +200,7 @@ export class Struct {
         let value = 0;
         for (let j = 0; j < 8; ++j) {
           const flag = flags[flag_i];
-          if ((flag != null) && (keys.get(flag))) {
+          if ((flag != null) && (values.get(flag))) {
             value |= (1 << j);
           }
           flag_i++;
