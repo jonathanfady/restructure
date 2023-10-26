@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
+    "target": "ESNext",
     "allowJs": true,
     "declaration": true,
     "emitDeclarationOnly": true

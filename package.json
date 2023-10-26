@@ -1,6 +1,6 @@
 {
   "name": "@jonathanfady/restructure",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Declaratively encode and decode binary data",
   "type": "module",
   "source": "./src/index.js",

@@ -25,6 +25,9 @@ export const doublebe = 'DoubleBE';
 export const double = doublebe;
 export const doublele = 'DoubleLE';
 
+/**
+ * @param {string} type
+ */
 export function getNumberSize(type) {
   switch (type) {
     case uint8:

@@ -1,7 +1,9 @@
 import { getNumberSize } from './Number.js';
 
 export class Struct {
-
+  /**
+   * @param {{[k: string]: any}} fields
+   */
   constructor(fields) {
     this.fields = new Map(Object.entries(fields));
     this.results = new Map();
@@ -34,25 +36,33 @@ export class Struct {
     this.pos_2 = 0;
   }
 
+  /**
+   * @param {Uint8Array} buffer
+   */
   fromBuffer(buffer) {
-    this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-    this.pos_1 = 0;
+    if (buffer.byteLength >= this.size) {
+      this.view_1 = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+      this.pos_1 = 0;
 
-    for (const [k, v] of this.fields) {
-      if (typeof v == 'string') { // Number
-        this.results.set(k, this['read' + v]());
-      } else if ("length" in v) { // Array
-        this.results.set(k, this.readArray(v.type, v.length));
-      } else if ("flags" in v) { // Bitfield
-        this.readBitfield(v.type, v.flags);
-      } else { // String
-        this.results.set(k, this.readString(v.size));
+      for (const [k, v] of this.fields) {
+        if (typeof v == 'string') { // Number
+          this.results.set(k, this['read' + v]());
+        } else if ("length" in v) { // Array
+          this.results.set(k, this.readArray(v.type, v.length));
+        } else if ("flags" in v) { // Bitfield
+          this.readBitfield(v.type, v.flags);
+        } else { // String
+          this.results.set(k, this.readString(v.size));
+        }
       }
     }
 
     return this.results;
   }
 
+  /**
+   * @param {Map<string, any>} values
+   */
   toBuffer(values) {
     this.pos_2 = 0;
 
