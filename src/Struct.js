@@ -2,7 +2,7 @@ import { getNumberSize } from './Number.js';
 
 export class Struct {
   /**
-   * @param {{[k: string]: any}} fields
+   * @param {Record<string,any>} fields
    */
   constructor(fields) {
     this.fields = new Map(Object.entries(fields));
@@ -30,10 +30,7 @@ export class Struct {
     }
 
     this.buffer = new Uint8Array(this.size);
-    this.view_1 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
-    this.view_2 = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
-    this.pos_1 = 0;
-    this.pos_2 = 0;
+    this.view = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
   }
 
   /**
@@ -64,7 +61,7 @@ export class Struct {
    * @param {Map<string, any>} values
    */
   toBuffer(values) {
-    this.pos_2 = 0;
+    this.pos = 0;
 
     for (const [k, v] of this.fields) {
       if (typeof v == 'string') { // Number
@@ -215,51 +212,51 @@ export class Struct {
           }
           flag_i++;
         }
-        this.buffer[this.pos_2++] = value;
+        this.buffer[this.pos++] = value;
       }
     }
   }
 
   writeString(length, string) {
     for (let i = 0; i < length; ++i) {
-      this.buffer[this.pos_2++] = string.charCodeAt(i);
+      this.buffer[this.pos++] = string.charCodeAt(i);
     }
   }
 
   writeUint8(value) {
-    this.buffer[this.pos_2++] = value;
+    this.buffer[this.pos++] = value;
   }
   writeInt8(value) {
-    this.view_2.setInt8(this.pos_2++, value);
+    this.view.setInt8(this.pos++, value);
   }
 
   writeUint16BE(value) {
-    this.view_2.setUint16(this.pos_2, value);
-    this.pos_2 += 2;
+    this.view.setUint16(this.pos, value);
+    this.pos += 2;
   }
   writeUint16LE(value) {
-    this.view_2.setUint16(this.pos_2, value, true);
-    this.pos_2 += 2;
+    this.view.setUint16(this.pos, value, true);
+    this.pos += 2;
   }
   writeInt16BE(value) {
-    this.view_2.setInt16(this.pos_2, value);
-    this.pos_2 += 2;
+    this.view.setInt16(this.pos, value);
+    this.pos += 2;
   }
   writeInt16LE(value) {
-    this.view_2.setInt16(this.pos_2, value, true);
-    this.pos_2 += 2;
+    this.view.setInt16(this.pos, value, true);
+    this.pos += 2;
   }
 
   writeUint24BE(value) {
-    this.buffer[this.pos_2++] = (value >>> 16) & 0xff;
-    this.buffer[this.pos_2++] = (value >>> 8) & 0xff;
-    this.buffer[this.pos_2++] = value & 0xff;
+    this.buffer[this.pos++] = (value >>> 16) & 0xff;
+    this.buffer[this.pos++] = (value >>> 8) & 0xff;
+    this.buffer[this.pos++] = value & 0xff;
   }
 
   writeUint24LE(value) {
-    this.buffer[this.pos_2++] = value & 0xff;
-    this.buffer[this.pos_2++] = (value >>> 8) & 0xff;
-    this.buffer[this.pos_2++] = (value >>> 16) & 0xff;
+    this.buffer[this.pos++] = value & 0xff;
+    this.buffer[this.pos++] = (value >>> 8) & 0xff;
+    this.buffer[this.pos++] = (value >>> 16) & 0xff;
   }
 
   writeInt24BE(value) {
@@ -279,37 +276,37 @@ export class Struct {
   }
 
   writeUint32BE(value) {
-    this.view_2.setUint32(this.pos_2, value);
-    this.pos_2 += 4;
+    this.view.setUint32(this.pos, value);
+    this.pos += 4;
   }
   writeUint32LE(value) {
-    this.view_2.setUint32(this.pos_2, value, true);
-    this.pos_2 += 4;
+    this.view.setUint32(this.pos, value, true);
+    this.pos += 4;
   }
   writeInt32BE(value) {
-    this.view_2.setInt32(this.pos_2, value);
-    this.pos_2 += 4;
+    this.view.setInt32(this.pos, value);
+    this.pos += 4;
   }
   writeInt32LE(value) {
-    this.view_2.setInt32(this.pos_2, value, true);
-    this.pos_2 += 4;
+    this.view.setInt32(this.pos, value, true);
+    this.pos += 4;
   }
 
   writeFloatBE(value) {
-    this.view_2.setFloat32(this.pos_2, value);
-    this.pos_2 += 4;
+    this.view.setFloat32(this.pos, value);
+    this.pos += 4;
   }
   writeFloatLE(value) {
-    this.view_2.setFloat32(this.pos_2, value, true);
-    this.pos_2 += 4;
+    this.view.setFloat32(this.pos, value, true);
+    this.pos += 4;
   }
 
   writeDoubleBE(value) {
-    this.view_2.setFloat64(this.pos_2, value);
-    this.pos_2 += 8;
+    this.view.setFloat64(this.pos, value);
+    this.pos += 8;
   }
   writeDoubleLE(value) {
-    this.view_2.setFloat64(this.pos_2, value, true);
-    this.pos_2 += 8;
+    this.view.setFloat64(this.pos, value, true);
+    this.pos += 8;
   }
 }
