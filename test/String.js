@@ -7,6 +7,14 @@ describe('String', function () {
       const string = new Struct({ string: String(7) });
       assert.deepEqual(string.fromBuffer(Buffer.from('testing')), new Map(Object.entries({ string: 'testing' })));
     });
+
+    it('should ignore \\x00 characters', function () {
+      const string = new Struct({ string: String(7) });
+      assert.deepEqual(string.fromBuffer(Buffer.from('t\x00e\x00s\x00t\x00ing')), new Map(Object.entries({ string: 'test' })));
+      assert.deepEqual(string.fromBuffer(Buffer.from('playthrough')), new Map(Object.entries({ string: 'playthr' })));
+      assert.deepEqual(string.fromBuffer(Buffer.from('p\x00lay\x00th\x00r\x00ough')), new Map(Object.entries({ string: 'playt' })));
+      assert.deepEqual(string.fromBuffer(Buffer.from('ping pong')), new Map(Object.entries({ string: 'ping po' })));
+    });
   });
 
   describe('size', function () {

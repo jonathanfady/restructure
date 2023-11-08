@@ -113,11 +113,14 @@ export class Struct {
   }
 
   readString(length) {
-    const chars = new Array(length);
+    let string = '';
     for (let i = 0; i < length; ++i) {
-      chars[i] = String.fromCharCode(this.view_1.getUint8(this.pos_1++));
+      const value = this.view_1.getUint8(this.pos_1++);
+      if (value) {
+        string += String.fromCharCode(value);
+      }
     }
-    return chars.join('');
+    return string;
   }
 
   readUint8() {
