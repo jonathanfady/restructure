@@ -14,7 +14,7 @@ export class Struct {
         this.results.set(k, 0);
         this.size += getNumberSize(value);
       } else if ("length" in value) { // Array
-        this.results.set(k, new Array(value.size).fill(0));
+        this.results.set(k, new Array(value.length).fill(0));
         this.size += value.size;
       } else if ("flags" in value) { // Bitfield
         for (const flag of value.flags) {
@@ -24,7 +24,7 @@ export class Struct {
         }
         this.size += value.size;
       } else { // String
-        this.results.set(k, ' '.repeat(value.size));
+        this.results.set(k, '');
         this.size += value.size;
       }
     }
