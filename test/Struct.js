@@ -28,7 +28,7 @@ describe('Struct', function () {
       assert.deepEqual(struct.fromBuffer(Buffer.from([21, 0x52, 0x22, 0x85, 0x77, 0x05, 0x12, 0x88, 0x63])), new Map(Object.entries({
         age: 21,
         height: 0x2252,
-        "one": true, "two": false, "three": false, "four": true, "five": true, "six": false,
+        "one": true, "two": false, "three": false, "four": true, "five": true, "six": true,
         length: 0x63881205
       })));
     });
@@ -96,7 +96,7 @@ describe('Struct', function () {
         length: 0x63881205
       })));
 
-      assert.deepEqual(buf, Buffer.from([21, 0x52, 0x22, 0x81, 0x04, 0x05, 0x12, 0x88, 0x63]));
+      assert.deepEqual(buf, Buffer.from([21, 0x52, 0x22, 0x81, 0x20, 0x05, 0x12, 0x88, 0x63]));
     });
   });
 });

@@ -64,6 +64,8 @@ uint16be, uint24be, uint32be, int16be, int24be, int32be, floatbe, doublebe
 
 The `Bitfield` type maps a number to an object with boolean keys mapping to each bit in that number,
 as defined in an array.
+The endianness of the number is ignored, as the bitfield is read and written one byte at a time (e.g. little endian is assumed).
+Each byte is read **MSB first** !
 You can also use an Array type with a fixed length to describe long bitfields that don't fit in a number type.
 When you define a bitfield in a Struct, the key provided will be ignored and the results Map will contain the flags directly as keys.
 
@@ -75,7 +77,7 @@ var struct1 = new Struct({bitfield: bitfield1});
 
 // struct1.fromBuffer(buffer)
 var result1 = Map(8) {
-  Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true
+  Jack: true, Kack: true, Lack: false, Mack: true, Nack: true, Oack: false, Pack: false, Quack: true
 };
 
 var bitfield2 = r.Bitfield(r.Array(r.uint8, 2), ['Jack', 'Kack', 'Lack', 'Mack', 'Nack', 'Oack', 'Pack', 'Quack',
@@ -84,8 +86,8 @@ var struct2 = new Struct({whateverKey: bitfield2});
 
 // struct2.fromBuffer(buffer)
 var result2 = Map(16) {
-  Jack: true, Kack: false, Lack: false, Mack: true, Nack: true, Oack: false, Pack: true, Quack: true,
-  Rack: true, Sack: true, Tack: false, Uack: true, Vack: true, Wack: false, Xack: true, Yack: false
+  Jack: true, Kack: true, Lack: false, Mack: true, Nack: true, Oack: false, Pack: false, Quack: true,
+  Rack: false, Sack: true, Tack: false, Uack: true, Vack: true, Wack: false, Xack: false, Yack: false
 };
 
 ```

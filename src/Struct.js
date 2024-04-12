@@ -88,26 +88,23 @@ export class Struct {
   }
 
   readBitfield(type, flags) {
+    let size;
     if (typeof type == 'string') { // Number
-      const value = this['read' + type]();
-
-      for (let i = 0; i < flags.length; ++i) {
-        const flag = flags[i];
-        if (flag != null) {
-          this.results.set(flag, !!(value & (1 << i)));
-        }
-      }
+      size = getNumberSize(type);
     } else { // Array
-      let flag_i = 0;
-      for (let i = 0; i < type.size; ++i) {
-        const value = this.readUint8();
-        for (let j = 0; j < 8; ++j) {
-          const flag = flags[flag_i];
-          if (flag != null) {
-            this.results.set(flag, !!(value & (1 << j)));
-          }
-          flag_i++;
+      size = type.size;
+    }
+
+    let flag_i = 0;
+
+    for (let i = 0; i < size; ++i) {
+      const value = this.readUint8();
+      for (let j = 0; j < 8; ++j) {
+        const flag = flags[flag_i];
+        if (flag != null) {
+          this.results.set(flag, !!(value & (0x80 >> j)));
         }
+        flag_i++;
       }
     }
   }
@@ -194,29 +191,24 @@ export class Struct {
   }
 
   writeBitfield(type, flags, values) {
+    let size;
     if (typeof type == 'string') { // Number
-      let value = 0;
-      for (let i = 0; i < flags.length; ++i) {
-        const flag = flags[i];
-        if ((flag != null) && (values.get(flag))) {
-          value |= (1 << i);
-        }
-      }
-
-      this['write' + type](value);
+      size = getNumberSize(type);
     } else { // Array
-      let flag_i = 0;
-      for (let i = 0; i < type.size; ++i) {
-        let value = 0;
-        for (let j = 0; j < 8; ++j) {
-          const flag = flags[flag_i];
-          if ((flag != null) && (values.get(flag))) {
-            value |= (1 << j);
-          }
-          flag_i++;
+      size = type.size;
+    }
+
+    let flag_i = 0;
+    for (let i = 0; i < size; ++i) {
+      let value = 0;
+      for (let j = 0; j < 8; ++j) {
+        const flag = flags[flag_i];
+        if ((flag != null) && (values.get(flag))) {
+          value |= (0x80 >> j);
         }
-        this.buffer[this.pos++] = value;
+        flag_i++;
       }
+      this.buffer[this.pos++] = value;
     }
   }
 
