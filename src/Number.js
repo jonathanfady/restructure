@@ -26,7 +26,8 @@ export const double = doublebe;
 export const doublele = 'DoubleLE';
 
 /**
- * @param {string} type
+ * Get number size from a number type
+ * @param {string} type - number string (uint8, int16be, uint32le, ...) defined in Number.js
  */
 export function getNumberSize(type) {
   switch (type) {
